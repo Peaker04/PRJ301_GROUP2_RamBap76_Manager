@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="text-center mt-3">
-                    <a href="${pageContext.request.contextPath}/view/authentication/forgot_password.jsp">Quên mật khẩu?</a>
+                    <a href="${pageContext.request.contextPath}/forgot-password">Quên mật khẩu?</a>
                 </div>
             </form>
         </div>

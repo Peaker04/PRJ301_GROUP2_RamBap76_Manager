@@ -22,9 +22,11 @@ public class AuthenticationFilter implements Filter {
         String contextPath = request.getContextPath();
         String uri = request.getRequestURI();
 
+        // Thêm kiểm tra để cho phép truy cập vào trang reset-password mà không yêu cầu login
         boolean isPublicResource = uri.equals(contextPath + "/login")
                 || uri.equals(contextPath + "/forgot-password")
-                || uri.startsWith(contextPath + "/assets/");
+                || uri.startsWith(contextPath + "/assets/")
+                || uri.startsWith(contextPath + "/reset-password");  // Đảm bảo rằng trang reset-password không bị chặn
 
         if (uri.equals(contextPath + "/")) {
             isPublicResource = true;
