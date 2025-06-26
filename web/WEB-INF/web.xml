@@ -4,27 +4,28 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-        
+
     <welcome-file-list>
         <welcome-file>login</welcome-file>
     </welcome-file-list>
-    
+
     <context-param>
         <param-name>dbUrl</param-name>
-        <param-value>jdbc:sqlserver://DESKTOP-57KFTGE;databaseName=RamBap76_Manager_Test3;encrypt=true;trustServerCertificate=true;</param-value>
+        <param-value>jdbc:sqlserver://CAOMINHTUAN\\SQLEXPRESS:1433;databaseName=RamBap76_Manager;encrypt=true;trustServerCertificate=true;</param-value>
     </context-param>
     <context-param>
         <param-name>dbUser</param-name>
-        <param-value>sa</param-value>
+        <param-value>tuancm24</param-value>
     </context-param>
     <context-param>
         <param-name>dbPassword</param-name>
-        <param-value>123</param-value>
+        <param-value>1234</param-value>
     </context-param>
     <context-param>
         <param-name>dbDriver</param-name>
         <param-value>com.microsoft.sqlserver.jdbc.SQLServerDriver</param-value>
     </context-param>
+
 
     <listener>
         <listener-class>listener.AppContextListener</listener-class>
