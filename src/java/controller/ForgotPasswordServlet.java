@@ -1,12 +1,13 @@
 package controller;
 
 import dao.UserDAO;
+import service.EmailService; // Đảm bảo bạn đã tạo EmailService
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-//import service.EmailService; // Service do Tuấn tạo
+import model.User;
 
 import java.io.IOException;
 import java.util.Date;
@@ -16,36 +17,47 @@ import java.util.UUID;
 public class ForgotPasswordServlet extends HttpServlet {
 
     private final UserDAO userDAO = new UserDAO();
-    // Giả sử EmailService đã được Tuấn tạo và có thể inject/khởi tạo
-//    private final EmailService emailService = new EmailService();
+    private final EmailService emailService = new EmailService(); // Khởi tạo EmailService
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Hiển thị form quên mật khẩu
+        request.getRequestDispatcher("/view/authentication/forgot_password.jsp").forward(request, response);
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
-        // String userEmail = userDAO.getEmailByUsername(username); // Cần có phương thức này trong DAO
 
-        // if (userEmail != null) {
-        try {
-            UUID token = UUID.randomUUID();
-            long expiryTime = System.currentTimeMillis() + (60 * 60 * 1000); // 1 giờ
-            Date expiryDate = new Date(expiryTime);
+        // Kiểm tra tên người dùng có tồn tại trong cơ sở dữ liệu không
+        User user = userDAO.findUserByUsername(username);
 
-            userDAO.saveResetToken(username, token, expiryDate);
+        if (user != null) {
+            try {
+                UUID token = UUID.randomUUID(); // Tạo token mới
+                long expiryTime = System.currentTimeMillis() + (60 * 60 * 1000); // Token hết hạn sau 1 giờ
+                Date expiryDate = new Date(expiryTime);
 
-            // Tạo link reset
-            String resetLink = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-                    + request.getContextPath() + "/reset_password?token=" + token.toString();
+                // Lưu token và thời gian hết hạn vào cơ sở dữ liệu
+                userDAO.saveResetToken(username, token, expiryDate);
 
-            // Gọi service của Tuấn
-            // emailService.sendPasswordResetEmail(userEmail, resetLink);
-            request.setAttribute("message", "Yêu cầu đã được gửi. Vui lòng kiểm tra email để đặt lại mật khẩu.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("errorMessage", "Có lỗi xảy ra, vui lòng thử lại.");
+                // Tạo liên kết đặt lại mật khẩu
+                String resetLink = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+                        + request.getContextPath() + "/reset-password?token=" + token.toString();
+
+                // Gửi email cho người dùng
+                emailService.sendPasswordResetEmail(user.getEmail(), resetLink);
+
+                request.setAttribute("message", "Yêu cầu đã được gửi. Vui lòng kiểm tra email để đặt lại mật khẩu.");
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("errorMessage", "Có lỗi xảy ra, vui lòng thử lại.");
+            }
+        } else {
+            request.setAttribute("errorMessage", "Tên đăng nhập không tồn tại.");
         }
-        // } else {
-        //     request.setAttribute("errorMessage", "Tên đăng nhập không tồn tại.");
-        // }
+
+        // Chuyển hướng lại trang forgot_password.jsp với thông báo
         request.getRequestDispatcher("view/authentication/forgot_password.jsp").forward(request, response);
     }
 }

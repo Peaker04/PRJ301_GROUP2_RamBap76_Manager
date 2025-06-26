@@ -13,11 +13,11 @@ public class User {
     private boolean enabled;
     private UUID resetToken;
     private Date tokenExpiry;
-
+    private String email;
     public User() {
     }
 
-    public User(int id, String username, String password, String fullName, String role, boolean enabled, UUID resetToken, Date tokenExpiry) {
+    public User(int id, String username, String password, String fullName, String role, boolean enabled, UUID resetToken, Date tokenExpiry, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -26,6 +26,7 @@ public class User {
         this.enabled = enabled;
         this.resetToken = resetToken;
         this.tokenExpiry = tokenExpiry;
+        this.email = email;
     }
 
     public int getId() {
@@ -91,7 +92,18 @@ public class User {
     public void setTokenExpiry(Date tokenExpiry) {
         this.tokenExpiry = tokenExpiry;
     }
-
     
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+        @Override
+    public String toString() {
+        return "User{id=" + id + ", username='" + username + "', fullName='" + fullName + "', role='" + role + "', enabled=" + enabled + ", email='" + email + "'}";
+    }
     
 }
