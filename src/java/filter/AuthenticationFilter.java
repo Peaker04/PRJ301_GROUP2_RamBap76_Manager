@@ -24,8 +24,11 @@ public class AuthenticationFilter implements Filter {
 
         boolean isPublicResource = uri.equals(contextPath + "/login")
                 || uri.equals(contextPath + "/forgot-password")
-                || uri.startsWith(contextPath + "/assets/");
-
+                || uri.startsWith(contextPath + "/assets/")
+                || uri.startsWith(contextPath + "/css/")
+                || uri.startsWith(contextPath + "/image/")
+                || uri.equals(contextPath + "/signup")
+                || uri.equals(contextPath + "/view/authentication/signup.jsp");
         if (uri.equals(contextPath + "/")) {
             isPublicResource = true;
         }
