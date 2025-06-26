@@ -3,6 +3,8 @@ package service;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import java.io.UnsupportedEncodingException;
+import jakarta.mail.Authenticator;
+import jakarta.mail.PasswordAuthentication;
 import java.util.Properties;
 
 public class EmailService {

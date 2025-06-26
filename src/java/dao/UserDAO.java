@@ -1,6 +1,7 @@
 package dao;
 
 import connect.DBConnection;
+import static connect.DBConnection.getConnection;
 import model.User;
 import org.mindrot.jbcrypt.BCrypt;
 

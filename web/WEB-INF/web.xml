@@ -11,15 +11,15 @@
     
     <context-param>
         <param-name>dbUrl</param-name>
-        <param-value>jdbc:sqlserver://CAOMINHTUAN\\SQLEXPRESS:1433;databaseName=RamBap76_Manager;encrypt=true;trustServerCertificate=true;</param-value>
+        <param-value>jdbc:sqlserver://DESKTOP-57KFTGE;databaseName=RamBap76_Manager_Test3;encrypt=true;trustServerCertificate=true;</param-value>
     </context-param>
     <context-param>
         <param-name>dbUser</param-name>
-        <param-value>tuancm24</param-value>
+        <param-value>sa</param-value>
     </context-param>
     <context-param>
         <param-name>dbPassword</param-name>
-        <param-value>1234</param-value>
+        <param-value>123</param-value>
     </context-param>
     <context-param>
         <param-name>dbDriver</param-name>

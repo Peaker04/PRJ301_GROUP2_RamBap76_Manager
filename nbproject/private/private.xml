@@ -14,19 +14,13 @@
             <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/ResetPasswordServlet.java</file>
             <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/ChangePasswordServlet.java</file>
             <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/authentication/forgot_password.jsp</file>
-            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/css/login.css</file>
-            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/image/Login_logo.jpg</file>
             <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/LoginServlet.java</file>
-            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/authentication/signup.jsp</file>
-            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/css/signup.css</file>
-            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/SignupServlet.java</file>
             <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/LogoutServlet.java</file>
             <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/ForgotPasswordServlet.java</file>
             <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/authentication/access_denied.jsp</file>
-            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/service/UserService.java</file>
-            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/utils/PasswordUtil.java</file>
             <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/authentication/reset_password.jsp</file>
             <file>file:/E:/NetBeans/RamBap76_Manager_Project/nbproject/private/private.xml</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/service/EmailService.java</file>
         </group>
     </open-files>
 </project-private>

@@ -68,7 +68,7 @@
                                     <input type="checkbox" id="remember-me" name="remember">
                                     <label for="remember-me">Remember me ?</label>
                                 </div>
-                                <a href="#" class="forgot-password">Forgot Password</a>
+                                <a href="${pageContext.request.contextPath}/forgot-password" class="forgot-password">Forgot Password</a>
                             </div>
 
                             <div class="form-cta">
