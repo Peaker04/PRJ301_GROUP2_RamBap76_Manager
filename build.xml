@@ -17,7 +17,7 @@
     <property name="dist.dir" location="dist"/>
     <property name="war.file" location="${dist.dir}/${project.name}.war"/>
 
-    <property name="tomcat.home" location="C:/Users/LEGION/Downloads/apache-tomcat-11.0.7"/>
+    <property name="tomcat.home" location="C:\Users\Minh Tuan\Downloads\TOMCAT\apache-tomcat-11.0.5"/>
     <property name="tomcat.webapps" location="${tomcat.home}/webapps"/>
 
     <!-- URL để mở trình duyệt -->
