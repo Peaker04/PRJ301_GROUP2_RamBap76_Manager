@@ -28,6 +28,7 @@ public class DBConnection {
         }
     }
 
+
  public static Connection getConnection() throws SQLException {
         if (DB_URL == null || DB_USER == null || DB_PASSWORD == null) {
             throw new SQLException("Database configuration is not initialized. Check AppContextListener.");
