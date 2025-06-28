@@ -1,12 +1,10 @@
-
-
 package dao;
 
-import model.Shipper;
+import connect.DBConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import connect.DBConnection;
+import model.Shipper;
 
 public class ShipperDAO {
 
@@ -30,6 +28,33 @@ public class ShipperDAO {
                     rs.getDouble("daily_income")
                 );
                 list.add(shipper);
+            }
+        }
+        return list;
+    }
+
+    // Lấy danh sách tất cả shipper trừ một shipper cụ thể
+    public List<Shipper> getAllShippersExcept(int excludeShipperId) throws SQLException {
+        List<Shipper> list = new ArrayList<>();
+        String sql = "SELECT s.user_id, u.full_name, s.area, s.priority_level, s.daily_income " +
+                     "FROM shippers s JOIN users u ON s.user_id = u.id " +
+                     "WHERE u.role = 'SHIPPER' AND s.user_id != ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, excludeShipperId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Shipper shipper = new Shipper(
+                        rs.getInt("user_id"),
+                        rs.getString("full_name"),
+                        rs.getString("area"),
+                        rs.getInt("priority_level"),
+                        rs.getDouble("daily_income")
+                    );
+                    list.add(shipper);
+                }
             }
         }
         return list;

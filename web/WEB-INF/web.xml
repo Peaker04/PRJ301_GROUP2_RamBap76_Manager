@@ -11,7 +11,7 @@
     
     <context-param>
         <param-name>dbUrl</param-name>
-        <param-value>jdbc:sqlserver://DESKTOP-57KFTGE;databaseName=RamBap76_Manager_Test3;encrypt=true;trustServerCertificate=true;</param-value>
+        <param-value>jdbc:sqlserver://DESKTOP-K647TQ4\MSSQLSERVER01;databaseName=RamBap76_Manager;encrypt=true;trustServerCertificate=true;</param-value>
     </context-param>
     <context-param>
         <param-name>dbUser</param-name>
@@ -29,5 +29,65 @@
     <listener>
         <listener-class>listener.AppContextListener</listener-class>
     </listener>
+
+    <!-- Shipper Dashboard Servlet -->
+    <servlet>
+        <servlet-name>ShipperDashboardServlet</servlet-name>
+        <servlet-class>controller.ShipperDashboardServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShipperDashboardServlet</servlet-name>
+        <url-pattern>/shipper/dashboard</url-pattern>
+    </servlet-mapping>
+
+    <!-- Update Delivery Status Servlet -->
+    <servlet>
+        <servlet-name>UpdateDeliveryStatusServlet</servlet-name>
+        <servlet-class>controller.UpdateDeliveryStatusServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateDeliveryStatusServlet</servlet-name>
+        <url-pattern>/shipper/update-delivery-status</url-pattern>
+    </servlet-mapping>
+
+    <!-- Complete Delivery Servlet -->
+    <servlet>
+        <servlet-name>CompleteDeliveryServlet</servlet-name>
+        <servlet-class>controller.CompleteDeliveryServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CompleteDeliveryServlet</servlet-name>
+        <url-pattern>/shipper/complete-delivery</url-pattern>
+    </servlet-mapping>
+
+    <!-- Request Transfer Servlet -->
+    <servlet>
+        <servlet-name>RequestTransferServlet</servlet-name>
+        <servlet-class>controller.RequestTransferServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RequestTransferServlet</servlet-name>
+        <url-pattern>/shipper/request-transfer</url-pattern>
+    </servlet-mapping>
+
+    <!-- Handle Transfer Servlet -->
+    <servlet>
+        <servlet-name>HandleTransferServlet</servlet-name>
+        <servlet-class>controller.HandleTransferServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HandleTransferServlet</servlet-name>
+        <url-pattern>/shipper/handle-transfer</url-pattern>
+    </servlet-mapping>
+
+    <!-- Notifications Servlet -->
+    <servlet>
+        <servlet-name>NotificationsServlet</servlet-name>
+        <servlet-class>controller.NotificationsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NotificationsServlet</servlet-name>
+        <url-pattern>/shipper/notifications</url-pattern>
+    </servlet-mapping>
 
 </web-app>
