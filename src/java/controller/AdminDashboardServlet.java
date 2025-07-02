@@ -12,7 +12,9 @@ import java.io.IOException;
 public class AdminDashboardServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/view/admin/dashboard.jsp").forward(request, response);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        request.setAttribute("contentPage", "/view/admin/dashboard.jsp");
+        request.getRequestDispatcher("/view/common/admin_layout.jsp").forward(request, response);
     }
 }
