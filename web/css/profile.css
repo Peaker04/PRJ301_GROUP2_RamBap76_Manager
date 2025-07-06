@@ -1,0 +1,203 @@
+/* ================================== */
+/* CSS DÀNH RIÊNG CHO TRANG PROFILE   */
+/* ================================== */
+
+.page-content {
+    padding: 24px 32px;
+}
+
+.page-header {
+    margin-bottom: 24px;
+}
+
+.page-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2A2A2A;
+    margin-bottom: 8px;
+}
+
+.page-header .breadcrumb {
+    color: #888888;
+    font-size: 14px;
+}
+
+.page-header .active-breadcrumb {
+    color: #1A71F6;
+    font-weight: 700;
+}
+
+/* Tabs Navigation */
+.tabs-nav {
+    display: flex;
+    border: 1px solid #D1D1D1;
+    border-radius: 14px;
+    background-color: #FFFFFF;
+    padding: 8px;
+    margin-bottom: 22px;
+}
+
+.tab-link {
+    flex: 1;
+    padding: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    color: #737373;
+    text-align: center;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.tab-link.active {
+    color: #1A71F6;
+    background-color: #D9EDFF;
+}
+
+/* Profile Content Layout */
+.profile-content {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.card {
+    background-color: #FFFFFF;
+    border: 1px solid #E7E7E7;
+    border-radius: 24px;
+    padding: 24px;
+}
+
+.card-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #454545;
+    margin: 0;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+/* Profile Picture Section */
+.profile-picture-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.profile-avatar {
+    width: 68px;
+    height: 68px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+/* Form Styles */
+.form-grid, .form-grid-contact {
+    display: grid;
+    gap: 16px;
+}
+
+.form-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.form-grid-contact {
+     grid-template-columns: repeat(2, 1fr);
+}
+
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group.form-group-full {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-weight: 700;
+    color: #323130;
+    font-size: 14px;
+}
+
+.form-control {
+    padding: 16px;
+    border: 1.6px solid #D1D1D1;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #454545;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #FFFFFF;
+    outline: none;
+}
+
+.form-control:focus {
+    border-color: #1A71F6;
+}
+
+.form-control:disabled {
+    background-color: #F0F0F0;
+    cursor: not-allowed;
+    color: #737373;
+}
+
+.form-actions {
+    margin-top: 24px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.btn-primary {
+    background-color: #1A71F6;
+    color: #FFFFFF;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.btn-secondary {
+    background: none;
+    color: #1A71F6;
+    text-decoration: underline;
+    padding: 12px 0;
+}
+
+.btn-icon {
+    border: 1px solid #B0B0B0;
+    background-color: #FFFFFF;
+    color: #454545;
+    padding: 8px 12px;
+    font-size: 12px;
+}
+
+.btn-icon:hover {
+    background-color: #f5f5f5;
+}

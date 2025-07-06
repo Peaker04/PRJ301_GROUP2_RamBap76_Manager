@@ -11,7 +11,7 @@
     
     <context-param>
         <param-name>dbUrl</param-name>
-        <param-value>jdbc:sqlserver://DESKTOP-K647TQ4\MSSQLSERVER01;databaseName=RamBap76_Manager;encrypt=true;trustServerCertificate=true;</param-value>
+        <param-value>jdbc:sqlserver://DESKTOP-57KFTGE;databaseName=RamBap76_Manager_Test5;encrypt=true;trustServerCertificate=true;</param-value>
     </context-param>
     <context-param>
         <param-name>dbUser</param-name>
@@ -29,16 +29,6 @@
     <listener>
         <listener-class>listener.AppContextListener</listener-class>
     </listener>
-
-    <!-- Shipper Dashboard Servlet -->
-    <servlet>
-        <servlet-name>ShipperDashboardServlet</servlet-name>
-        <servlet-class>controller.ShipperDashboardServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ShipperDashboardServlet</servlet-name>
-        <url-pattern>/shipper/dashboard</url-pattern>
-    </servlet-mapping>
 
     <!-- Update Delivery Status Servlet -->
     <servlet>
