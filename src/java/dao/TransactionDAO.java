@@ -1,11 +1,10 @@
 package dao;
 
 import connect.DBConnection;
-import model.Transaction;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import model.Transaction;
 
 public class TransactionDAO {
 
@@ -70,6 +69,21 @@ public class TransactionDAO {
             }
         }
         return 0;
+    }
+
+    public boolean createTransaction(Transaction transaction) {
+        String sql = "INSERT INTO transactions (shipper_id, type, amount, description) VALUES (?, ?, ?, ?)";
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, transaction.getShipperId());
+            ps.setString(2, transaction.getType());
+            ps.setDouble(3, transaction.getAmount());
+            ps.setString(4, transaction.getDescription());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
 

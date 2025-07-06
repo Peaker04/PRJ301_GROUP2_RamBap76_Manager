@@ -32,6 +32,7 @@ public class AuthenticationFilter implements Filter {
                 || uri.equals(contextPath + "/view/authentication/signup.jsp")
                 || uri.equals(contextPath + "/view/authentication/email_sended.jsp")
                 || uri.startsWith(contextPath + "/reset-password");
+                
 
         if (uri.equals(contextPath + "/")) {
             isPublicResource = true;

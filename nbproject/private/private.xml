@@ -11,6 +11,13 @@
             <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/css/account.css</file>
             <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/authentication/account.jsp</file>
             <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/admin/dashboard.jsp</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/build.xml</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/WEB-INF/web.xml</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/shipper/dashboard.jsp</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/filter/AuthenticationFilter.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/ShipperDashboardServlet.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/css/shipper.css</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/CompleteDeliveryServlet.java</file>
         </group>
     </open-files>
 </project-private>
