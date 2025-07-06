@@ -30,6 +30,7 @@ public class AuthenticationFilter implements Filter {
                 || uri.startsWith(contextPath + "/image/")
                 || uri.equals(contextPath + "/signup")
                 || uri.equals(contextPath + "/view/authentication/signup.jsp")
+                || uri.equals(contextPath + "/view/authentication/email_sended.jsp")
                 || uri.startsWith(contextPath + "/reset-password");
 
         if (uri.equals(contextPath + "/")) {

@@ -22,25 +22,43 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String user = request.getParameter("username");
-        String pass = request.getParameter("password");
-        User account = userDAO.login(user, pass);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        // NEW: Get the role selected by the user from the form.
+        String selectedRole = request.getParameter("role");
 
+        User account = userDAO.login(username, password);
+
+        // Check if user credentials are valid first.
         if (account != null) {
-            HttpSession session = request.getSession();
-            session.setAttribute("user", account);
+            String actualRole = account.getRole();
 
-            // Phân quyền dựa trên String role
-            String role = account.getRole();
-            if ("ADMIN".equals(role)) {
-                response.sendRedirect(request.getContextPath() + "/admin/dashboard");
-            } else if ("SHIPPER".equals(role)) {
-                response.sendRedirect(request.getContextPath() + "/shipper/dashboard");
+            // NEW: Check if the selected role matches the user's actual role in the database.
+            if (selectedRole.equals(actualRole)) {
+                // SUCCESS: Role matches, proceed with login.
+                HttpSession session = request.getSession();
+                session.setAttribute("user", account);
+
+                // Redirect based on the verified role.
+                if ("ADMIN".equals(actualRole)) {
+                    response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+                } else if ("SHIPPER".equals(actualRole)) {
+                    response.sendRedirect(request.getContextPath() + "/shipper/dashboard");
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/access_denied.jsp");
+                }
             } else {
-                response.sendRedirect(request.getContextPath() + "/access_denied.jsp");
+                // ERROR 1: Credentials are correct, but the selected role is wrong.
+                request.setAttribute("errorMessage", "Vui lòng chọn đúng vai trò (Admin/Shipper)");
+                // Retain the username and selected role to display on the form again.
+                request.setAttribute("username", username);
+                request.getRequestDispatcher("view/authentication/login.jsp").forward(request, response);
             }
         } else {
+            // ERROR 2: Invalid username or password.
             request.setAttribute("errorMessage", "Tên đăng nhập hoặc mật khẩu không đúng.");
+            // Retain the username to display on the form again.
+            request.setAttribute("username", username);
             request.getRequestDispatcher("view/authentication/login.jsp").forward(request, response);
         }
     }

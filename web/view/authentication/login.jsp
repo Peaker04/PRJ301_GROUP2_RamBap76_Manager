@@ -6,8 +6,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Culters - Sign In</title>
-        <%-- Đường dẫn đến CSS (Đúng) --%>
+        <title>RamBap76 - Sign In</title>
+        <%-- Path to CSS (Correct) --%>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
     </head>
     <body>
@@ -16,7 +16,7 @@
                 <div class="form-content">
 
                     <header class="logo">
-                        <%-- Đường dẫn đến ảnh (Đúng) --%>
+                        <%-- Path to image (Correct) --%>
                         <img src="${pageContext.request.contextPath}/image/Login_logo.jpg" alt="Culters Logo" style="height: 56px; vertical-align: middle;">
                         <span class="logo-text">RamBap76</span>
                     </header>
@@ -30,7 +30,7 @@
                             <div class="error-message">${errorMessage}</div>
                         </c:if>
 
-                        <%-- Form action trỏ đến LoginServlet (Đúng) --%>
+                        <%-- Form action points to LoginServlet (Correct) --%>
                         <form action="${pageContext.request.contextPath}/login" method="POST" class="login-form">
 
                             <button type="button" class="btn btn-google">
@@ -45,7 +45,16 @@
                                 <span>OR</span>
                                 <hr>
                             </div>
-
+                            
+                            <div class="form-group">
+                                <label for="role">Role</label>
+                                <div class="input-wrapper">
+                                    <select id="role" name="role" class="input-field" required>
+                                        <option value="ADMIN" ${param.role == 'ADMIN' ? 'selected' : ''}>Admin</option>
+                                        <option value="SHIPPER" ${param.role == 'SHIPPER' ? 'selected' : ''}>Shipper</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label for="username">Username</label>
                                 <div class="input-wrapper">
@@ -73,7 +82,6 @@
 
                             <div class="form-cta">
                                 <button type="submit" class="btn btn-primary">Sign In</button>
-                                <%-- ĐƯỜNG DẪN QUAN TRỌNG: Đã được sửa để trỏ đúng vị trí file signup.jsp --%>
                                 <p class="signup-link">Do not have an account? <a href="${pageContext.request.contextPath}/view/authentication/signup.jsp">Sign Up</a></p>
                             </div>
 
@@ -84,7 +92,6 @@
             </section>
 
             <section class="promo-column">
-                <%-- Đường dẫn đến ảnh (Đúng) --%>
                 <img src="${pageContext.request.contextPath}/image/dashboard.png" alt="Dashboard Preview" class="dashboard-image">
                 <div class="promo-text">
                     <h2>Easy-to-Use Dashboard for Managing Your Business.</h2>
@@ -98,14 +105,12 @@
             </section>
         </main>
 
-
         <script>
+            // Your existing script remains unchanged.
             document.addEventListener('DOMContentLoaded', function () {
                 const eyeIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>`;
                 const eyeOffIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>`;
-
                 const togglePasswordIcons = document.querySelectorAll('.toggle-password');
-
                 togglePasswordIcons.forEach(icon => {
                     icon.addEventListener('click', function () {
                         const passwordInput = this.previousElementSibling;
