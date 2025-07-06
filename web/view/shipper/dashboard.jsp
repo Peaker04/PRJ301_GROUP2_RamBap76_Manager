@@ -86,6 +86,7 @@
                     </div>
                 </c:if>
 
+
                 <div class="row mb-4">
                     <div class="col-md-4">
                         <div class="card income-card">
@@ -101,6 +102,7 @@
                         </div>
                     </div>
                 </div>
+
 
                 <div class="row mb-4">
                     <div class="col-12">
@@ -153,6 +155,7 @@
                     </div>
                 </div>
 
+
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -181,29 +184,15 @@
                                                                 <strong>Phí giao:</strong> <fmt:formatNumber value="${delivery.deliveryFee}" type="currency" currencySymbol="₫"/><br>
                                                                 <strong>Phí hộp:</strong> <fmt:formatNumber value="${delivery.boxFee}" type="currency" currencySymbol="₫"/>
                                                             </p>
-                                                            <button type="button" class="btn btn-success btn-sm"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#completeDeliveryModal"
-                                                                    data-delivery-id="${delivery.id}"
-                                                                    data-order-id="${delivery.orderId}">
-                                                                <i class="fas fa-check-double me-1"></i> Hoàn thành
+                                                            <button type="button" class="btn btn-success btn-sm" 
+                                                                    data-bs-toggle="modal" 
+                                                                    data-bs-target="#completeModal${delivery.id}">
+                                                                <i class="fas fa-check-double me-1"></i>Hoàn thành
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </c:forEach>
-                                        </div>
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
-
-    <div class="modal" id="completeDeliveryModal" tabindex="-1">
+<div class="modal" id="completeDeliveryModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -226,11 +215,20 @@
                 </form>
             </div>
         </div>
+    </div>F
+                                            </c:forEach>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
+<script>
         var completeModal = document.getElementById('completeDeliveryModal');
         if (completeModal) {
             completeModal.addEventListener('show.bs.modal', function (event) {
@@ -253,4 +251,4 @@
         }
     </script>
 </body>
-</html>
+</html> 

@@ -30,7 +30,6 @@
         <listener-class>listener.AppContextListener</listener-class>
     </listener>
 
-
     <!-- Update Delivery Status Servlet -->
     <servlet>
         <servlet-name>UpdateDeliveryStatusServlet</servlet-name>
