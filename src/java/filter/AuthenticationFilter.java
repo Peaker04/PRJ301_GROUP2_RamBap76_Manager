@@ -30,7 +30,9 @@ public class AuthenticationFilter implements Filter {
                 || uri.startsWith(contextPath + "/image/")
                 || uri.equals(contextPath + "/signup")
                 || uri.equals(contextPath + "/view/authentication/signup.jsp")
-                || uri.startsWith(contextPath + "/reset-password");
+                || uri.startsWith(contextPath + "/reset-password")
+                || uri.equals(contextPath + "/chat")
+                || uri.equals(contextPath + "/chatbot");// Cho phép truy cập chatbot
 
         if (uri.equals(contextPath + "/")) {
             isPublicResource = true;
@@ -56,6 +58,6 @@ public class AuthenticationFilter implements Filter {
             response.sendRedirect(contextPath + "/access_denied.jsp");
         } else {
             chain.doFilter(request, response);
-        }
+        }   
     }
 }
