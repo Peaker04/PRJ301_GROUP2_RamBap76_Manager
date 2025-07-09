@@ -5,87 +5,8 @@
 <!-- Include Bootstrap Icons & Google Fonts -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin_layout.css">
 
-<style>
-    body {
-        margin: 0;
-        font-family: 'Inter', sans-serif;
-        background-color: #f9f9f9;
-    }
-
-    .admin-layout {
-        display: flex;
-        height: 100vh;
-        overflow: hidden;
-    }
-
-    .sidebar {
-        width: 260px;
-        background-color: #fff;
-        border-right: 1px solid #e0e0e0;
-        padding: 30px 20px;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .sidebar a {
-        text-decoration: none;
-        color: #555;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        padding: 12px 10px;
-        border-radius: 8px;
-        transition: all 0.2s;
-        margin-bottom: 6px;
-    }
-
-    .sidebar a.active,
-    .sidebar a:hover {
-        background-color: #eef2ff;
-        color: #3f51b5;
-    }
-
-    .sidebar i {
-        margin-right: 12px;
-        font-size: 18px;
-    }
-
-    .main-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .header {
-        height: 80px;
-        background-color: #fff;
-        border-bottom: 1px solid #e0e0e0;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 24px;
-    }
-
-    .header .user-info {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .header img {
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .content-area {
-        padding: 24px;
-        overflow-y: auto;
-        flex-grow: 1;
-    }
-</style>
 
 <!-- Gán URI hiện tại -->
 <c:set var="uri" value="${pageContext.request.requestURI}" />
@@ -94,7 +15,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div style="font-size: 16px; font-weight: bold; margin-bottom: 32px; color: #3f51b5;">
-            <img src="image/Login_logo.jsp" alt="Logo" style="height: 30px; vertical-align: middle;"/>RamBap76_Manager
+            <img src="${pageContext.request.contextPath}/image/Login_logo.jpg" alt="Logo" style="height: 30px; vertical-align: middle;"/>RamBap76_Manager
         </div>
 
         <a href="${pageContext.request.contextPath}/admin/dashboard"
@@ -109,13 +30,13 @@
            class="${fn:contains(uri, '/admin/customers') ? 'active' : ''}">
             <i class="bi bi-people"></i> Customers
         </a>
-        <a href="${pageContext.request.contextPath}/admin/receipt"
+        <a href="${pageContext.request.contextPath}/admin/receipts"
            class="${fn:contains(uri, '/admin/receipt') ? 'active' : ''}">
             <i class="bi bi-receipt"></i> Receipt
         </a>
-        <a href="${pageContext.request.contextPath}/admin/product_stock"
-           class="${fn:contains(uri, '/admin/product_stock') ? 'active' : ''}">
-            <i class="bi bi-box2-heart"></i> Product Stock
+        <a href="${pageContext.request.contextPath}/admin/products"
+           class="${fn:contains(uri, '/admin/products') ? 'active' : ''}">
+            <i class="bi bi-box2-heart"></i> Product
         </a>
         <a href="${pageContext.request.contextPath}/admin/reports"
            class="${fn:contains(uri, '/admin/reports') ? 'active' : ''}">
@@ -125,9 +46,9 @@
            class="${fn:contains(uri, '/admin/support') ? 'active' : ''}">
             <i class="bi bi-headset"></i> Support
         </a>
-        <a href="${pageContext.request.contextPath}/admin/settings"
-           class="${fn:contains(uri, '/admin/settings') ? 'active' : ''}">
-            <i class="bi bi-gear"></i> Settings
+        <a href="${pageContext.request.contextPath}/admin/account&settings"
+           class="${fn:contains(uri, '/admin/account&settings') ? 'active' : ''}">
+            <i class="bi bi-gear"></i> Account & Settings
         </a>
     </div>
 

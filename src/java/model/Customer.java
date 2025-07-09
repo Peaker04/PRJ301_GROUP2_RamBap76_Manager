@@ -8,6 +8,7 @@ public class Customer {
     private String notes;
     private Double latitude;
     private Double longitude;
+    private int totalOrders;
 
     public Customer() {
     }
@@ -77,7 +78,13 @@ public class Customer {
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
-    
-    
+
+    public int getTotalOrders() {
+        return totalOrders;
+    }
+
+    public void setTotalOrders(int totalOrders) {
+        this.totalOrders = totalOrders;
+    }
 }
 

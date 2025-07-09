@@ -24,10 +24,23 @@ public class ManageOrderServlet extends HttpServlet {
         String sort = request.getParameter("sort");
         if (sort == null || (!sort.equals("asc") && !sort.equals("desc"))) sort = "desc";
         
+        int size = 10;
+        int page = 1;
+        try {
+            page = Integer.parseInt(request.getParameter("page"));
+            if (page < 1) page = 1;
+        } catch (Exception ex) {
+            page = 1;
+        }
+        
         try (Connection conn = DBConnection.getConnection()) {
             OrderDAO orderDAO = new OrderDAO(conn);
-            List<Order> orders = orderDAO.getOrders(status, search, sort);
             
+            int totalOrders = orderDAO.countOrders(status, search);
+            int totalPages = (int)Math.ceil((double)totalOrders / size);
+            if (page > totalPages && totalPages > 0) page = totalPages;
+            
+            List<Order> orders = orderDAO.getOrdersByPage(status, search, sort, page, size);
             List<Order> allOrders = orderDAO.getOrders(null, search, sort);
 
             Map<String, Integer> statusCounts = new HashMap<>();
@@ -40,6 +53,12 @@ public class ManageOrderServlet extends HttpServlet {
             request.setAttribute("orders", orders);
             request.setAttribute("status", status);
             request.setAttribute("statusCounts", statusCounts);
+            request.setAttribute("page", page);
+            request.setAttribute("size", size);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("totalOrders", totalOrders);
+            request.setAttribute("sort", sort);
+            request.setAttribute("search", search);
             request.setAttribute("contentPage", "/view/admin/order_list.jsp");
             request.getRequestDispatcher("/view/common/admin_layout.jsp").forward(request, response);
         } catch (Exception e) {
@@ -47,8 +66,29 @@ public class ManageOrderServlet extends HttpServlet {
         }
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String action = request.getParameter("action");
+            if ("multiDelete".equals(action)) {
+                String ids = request.getParameter("ids");
+                if (ids != null && !ids.trim().isEmpty()) {
+                    String[] idArr = ids.split(",");
+                    try (Connection conn = DBConnection.getConnection()) {
+                        OrderDAO orderDAO = new OrderDAO(conn);
+                        for (String idStr : idArr) {
+                            try {
+                                int orderId = Integer.parseInt(idStr.trim());
+                                orderDAO.deleteOrder(orderId);
+                            } catch (NumberFormatException ignore) {}
+                        }
+                    } catch (Exception e) {
+                        throw new ServletException(e);
+                    }
+                }
+                response.sendRedirect(request.getContextPath() + "/admin/orders");
+                return;
+            }
         doGet(request, response);
     }
 }

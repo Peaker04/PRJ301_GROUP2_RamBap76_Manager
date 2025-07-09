@@ -33,7 +33,7 @@ public class CreateCustomerServlet extends HttpServlet {
             c.setAddress(address);
             c.setNotes(notes);
             customerDAO.createCustomer(c);
-            resp.sendRedirect(req.getContextPath() + "/admin/orders/create?new_customer=1");
+            resp.sendRedirect(req.getContextPath() + "/admin/customers");
         } catch (Exception e) {
             throw new ServletException(e);
         }

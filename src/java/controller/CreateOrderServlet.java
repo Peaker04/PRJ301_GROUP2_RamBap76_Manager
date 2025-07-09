@@ -25,7 +25,6 @@ public class CreateOrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try (Connection conn = DBConnection.getConnection()) {
-            // Lấy danh sách khách hàng, sản phẩm cho form
             CustomerDAO customerDAO = new CustomerDAO(conn);
             ProductDAO productDAO = new ProductDAO(conn);
             List<Customer> customers = customerDAO.getAllCustomers();
@@ -41,8 +40,11 @@ public class CreateOrderServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try (Connection conn = DBConnection.getConnection()) {
+        try (Connection conn = DBConnection.getConnection()) { 
+            
             OrderDAO orderDAO = new OrderDAO(conn);
+            ProductDAO productDAO = new ProductDAO(conn); 
+
             int customerId = Integer.parseInt(req.getParameter("customer_id"));
             String status = req.getParameter("status");
             String notes = req.getParameter("notes");
@@ -68,12 +70,52 @@ public class CreateOrderServlet extends HttpServlet {
                 }
                 idx++;
             }
-            // Thêm đơn hàng mới
-            orderDAO.createOrder(customerId, status, appointmentTime, notes, priorityDeliveryDate, productIds, quantities);
+
+            boolean enoughStock = true;
+            StringBuilder errorMsg = new StringBuilder();
+            for (int i = 0; i < productIds.size(); i++) {
+                int productId = productIds.get(i);
+                int quantity = quantities.get(i);
+                int stock = productDAO.getCurrentStock(productId);
+                String productName = productDAO.getProductName(productId);
+                if (quantity > stock) {
+                    enoughStock = false;
+                    errorMsg.append("Sản phẩm ").append(productName)
+                            .append(" chỉ còn ").append(stock)
+                            .append(" sản phẩm trong kho.<br>");
+                }
+            }
+            if (!enoughStock) {
+                
+                CustomerDAO customerDAO = new CustomerDAO(conn);
+                List<Customer> customers = customerDAO.getAllCustomers();
+                List<Product> products = productDAO.getAllProducts();
+                req.setAttribute("customers", customers);
+                req.setAttribute("products", products);
+                req.setAttribute("error", errorMsg.toString());
+                req.setAttribute("contentPage", "/view/admin/order_form.jsp");
+                req.getRequestDispatcher("/view/common/admin_layout.jsp").forward(req, resp);
+                return;
+            }
+
+            conn.setAutoCommit(false);
+            try {
+                orderDAO.createOrder(customerId, status, appointmentTime, notes, priorityDeliveryDate, productIds, quantities);
+                for (int i = 0; i < productIds.size(); i++) {
+                    int productId = productIds.get(i);
+                    int quantity = quantities.get(i);
+                    productDAO.deductStockByBatch(productId, quantity);
+                }
+                conn.commit();
+            } catch (Exception ex) {
+                conn.rollback();
+                throw ex;
+            } finally {
+                conn.setAutoCommit(true);
+            }
             resp.sendRedirect(req.getContextPath() + "/admin/orders?created=1");
         } catch (Exception e) {
             throw new ServletException(e);
         }
     }
 }
-

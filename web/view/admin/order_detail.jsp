@@ -4,18 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
-<style>
-    body { background: #f5f6fa; }
-    .detail-card {
-        border-radius: 22px;
-        box-shadow: 0 2px 16px rgba(120,120,180,0.08);
-        background: #fff;
-        border: none;}
-    .field-label { color: #60667b; font-size: 1.06em; }
-    .badge-status { font-size: 1em; padding: 6px 18px; border-radius: 12px; font-weight: 600; }
-</style>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/detail.css">
 
 <c:set var="isEdit" value="${param.edit == '1'}"/>
 <div class="container py-4" style="max-width:900px;">
@@ -111,12 +100,12 @@
                                     </div>
                                 </div>
                             </c:forEach>
-                        </c:when>
+                        </c:when>   
                         <c:otherwise>
                             <div class="row mb-2 align-items-center item-row">
                                 <div class="col-7">
                                     <select name="product_id_0" class="form-select" required>
-                                        <option value="">-- Chọn sản phẩm --</option>
+                                        <option value="">-- Choose Product --</option>
                                         <c:forEach var="p" items="${products}">
                                             <option value="${p.id}">${p.name}</option>
                                         </c:forEach>
@@ -133,12 +122,12 @@
                     </c:choose>
                 </div>
                 <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="addOrderItemBtn">
-                    <i class="bi bi-plus"></i> Thêm sản phẩm
+                    <i class="bi bi-plus"></i> Add Product
                 </button>
                 <input type="hidden" id="itemCount" name="itemCount"
                        value="${not empty orderDetails ? fn:length(orderDetails) : 1}"/>
                 <div class="mt-3">
-                    <button class="btn btn-success px-4" type="submit"><i class="bi bi-save"></i> Save Changes</button>
+                    <button class="btn btn-success px-4" type="submit"><i class="bi bi-save"></i>Save Changes</button>
                     <a href="?id=${order.id}" class="btn btn-secondary ms-2">Cancel</a>
                 </div>
             </c:if>

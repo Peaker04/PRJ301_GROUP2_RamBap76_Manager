@@ -1,0 +1,90 @@
+/* === Google Fonts Import === */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
+
+body{
+    background: #f5f6fa;
+}
+.dashboard-container {
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 2px 18px 0 rgba(80,80,150,0.06);
+    border: none;
+    justify-content: center;
+    padding: 10px;
+}
+.welcome {
+    font-size: 2.3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.dashboard-content {
+    display: flex;
+    gap: 32px;
+}
+.dashboard-main {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+}
+.dashboard-chart-box {
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.dashboard-chart-box h4 {
+    text-align: center;
+    font-size: 2.1rem;
+    margin-bottom: 0;
+    color: #222;
+}
+.dashboard-charts-row {
+    display: flex;
+    gap: 28px;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.dashboard-donut-box {
+    flex: 1;
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px 8px 0 8px;
+    min-width: 250px;
+    min-height: 270px;
+    text-align: center;
+    font-size: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.dashboard-side {
+    flex: 1;
+}
+.dashboard-side h4 {
+    font-size: 2rem;
+    text-align: center;
+    margin: 0px 18px;
+}
+.top-users-list {
+    list-style: none;
+    padding: 0;
+}
+.top-users-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    font-size: 1.2rem;
+}
+.top-user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 13px;
+    border: 1px solid #eaeaea;
+}
+.top-user-name {
+    font-weight: bold;
+}
+.top-user-orders {
+    color: #666;
+    font-size: 1rem;
+}

@@ -2,7 +2,10 @@ package dao;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import model.Customer;
 import model.Order;
 import model.OrderDetail;
@@ -189,6 +192,104 @@ public class OrderDAO {
             ps2.setInt(1, orderId);
             ps2.executeUpdate();
         }
+    }
+    
+    public int countOrders(String status, String search) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM orders o JOIN customers c ON o.customer_id = c.id WHERE 1=1";
+        List<Object> params = new ArrayList<>();
+        if (status != null && !status.isEmpty()) {
+            sql += " AND o.status = ?";
+            params.add(status);
+        }
+        if (search != null && !search.isEmpty()) {
+            sql += " AND (CAST(o.id AS NVARCHAR) LIKE ? OR c.name LIKE ? OR o.notes LIKE ?)";
+            String q = "%" + search + "%";
+            params.add(q); params.add(q); params.add(q);
+        }
+        PreparedStatement ps = conn.prepareStatement(sql);
+        for (int i = 0; i < params.size(); i++) ps.setObject(i + 1, params.get(i));
+        ResultSet rs = ps.executeQuery();
+        return rs.next() ? rs.getInt(1) : 0;
+    }
+
+    public List<Order> getOrdersByPage(String status, String search, String sort, int page, int size) throws SQLException {
+        List<Order> list = new ArrayList<>();
+        int offset = (page - 1) * size;
+        String sql = "SELECT o.*, c.name as customer_name FROM orders o JOIN customers c ON o.customer_id = c.id WHERE 1=1";
+        List<Object> params = new ArrayList<>();
+        if (status != null && !status.isEmpty()) {
+            sql += " AND o.status = ?";
+            params.add(status);
+        }
+        if (search != null && !search.isEmpty()) {
+            sql += " AND (CAST(o.id AS NVARCHAR) LIKE ? OR c.name LIKE ? OR o.notes LIKE ?)";
+            String q = "%" + search + "%";
+            params.add(q); params.add(q); params.add(q);
+        }
+        if (sort == null || (!sort.equalsIgnoreCase("asc") && !sort.equalsIgnoreCase("desc"))) {
+            sort = "desc";
+        }
+        sql += " ORDER BY o.order_date " + sort.toUpperCase() + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        params.add(offset);
+        params.add(size);
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+        for (int i = 0; i < params.size(); i++) ps.setObject(i + 1, params.get(i));
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Order o = new Order();
+            o.setId(rs.getInt("id"));
+            o.setStatus(rs.getString("status"));
+            o.setOrderDate(rs.getTimestamp("order_date"));
+            o.setAppointmentTime(rs.getTimestamp("appointment_time"));
+            o.setPriorityDeliveryDate(rs.getDate("priority_delivery_date"));
+            o.setNotes(rs.getString("notes"));
+            Customer c = new Customer();
+            c.setId(rs.getInt("customer_id"));
+            c.setName(rs.getString("customer_name"));
+            o.setCustomer(c);
+            list.add(o);
+        }
+        return list;
+    }
+    
+    public List<Order> getOrdersByCustomer(int customerId, String sort) throws SQLException {
+        List<Order> list = new ArrayList<>();
+        String sql = "SELECT * FROM orders WHERE customer_id = ? ORDER BY order_date " + ("asc".equalsIgnoreCase(sort) ? "ASC" : "DESC");
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Order o = new Order();
+                o.setId(rs.getInt("id"));
+                o.setStatus(rs.getString("status"));
+                o.setOrderDate(rs.getTimestamp("order_date"));
+                o.setAppointmentTime(rs.getTimestamp("appointment_time"));
+                o.setPriorityDeliveryDate(rs.getDate("priority_delivery_date"));
+                o.setNotes(rs.getString("notes"));
+                list.add(o);
+            }
+        }
+        return list;
+    }
+
+    public Map<String, Integer> getOrderCountByMonth(int numMonths) throws SQLException {
+        String sql = """
+            SELECT FORMAT(order_date, 'yyyy-MM') AS ym, COUNT(*) as cnt
+            FROM orders
+            WHERE order_date >= DATEADD(MONTH, -?, GETDATE())
+            GROUP BY FORMAT(order_date, 'yyyy-MM')
+            ORDER BY ym
+        """;
+        Map<String, Integer> map = new LinkedHashMap<>();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, numMonths-1);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                map.put(rs.getString(1), rs.getInt(2));
+            }
+        }
+        return map;
     }
 }
 
