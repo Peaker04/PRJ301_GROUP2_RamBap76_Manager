@@ -6,12 +6,12 @@
 
         
     <welcome-file-list>
-        <welcome-file>login</welcome-file>
+        <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
     
     <context-param>
         <param-name>dbUrl</param-name>
-        <param-value>jdbc:sqlserver://DESKTOP-57KFTGE;databaseName=RamBap76_Manager_Test5;encrypt=true;trustServerCertificate=true;</param-value>
+        <param-value>jdbc:sqlserver://DESKTOP-K3N4QD0;databaseName=RamBap76_Manager_Test3;encrypt=true;trustServerCertificate=true;</param-value>
     </context-param>
     <context-param>
         <param-name>dbUser</param-name>

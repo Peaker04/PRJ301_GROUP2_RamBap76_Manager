@@ -101,7 +101,7 @@
                     <div class="dot active"></div>
                     <div class="dot"></div>
                     <div class="dot"></div>
-                </div>
+                </div>  
             </section>
         </main>
 
