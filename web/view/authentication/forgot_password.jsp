@@ -1,29 +1,63 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html>
-    <head>
-        <title>Quên Mật Khẩu</title>
-    </head>
-    <body>
-        <div class="container">
-            <h2>Quên Mật Khẩu</h2>
-            <p>Nhập tên đăng nhập của bạn. Nếu tồn tại, một đường dẫn đặt lại mật khẩu sẽ được gửi (trong thực tế sẽ gửi qua email).</p>
+<%-- File: view/authentication/forgot_password.jsp --%>
 
-            <c:if test="${not empty errorMessage}">
-                <div class="alert alert-danger">${errorMessage}</div>
-            </c:if>
-            <c:if test="${not empty message}">
-                <div class="alert alert-info">${message}</div>
-            </c:if>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 
-            <form action="${pageContext.request.contextPath}/forgot-password" method="post">
-                <div class="form-group">
-                    <label for="username">Tên đăng nhập:</label>
-                    <input type="text" id="username" name="username" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Gửi Yêu Cầu</button>
-                <a href="${pageContext.request.contextPath}/login">Quay lại Đăng nhập</a>
-            </form>
-        </div>
-    </body>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <%-- (Phần head giữ nguyên như cũ) --%>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Your Password</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/forgotpassword.css">
+    <style>
+        .message.error {
+            background-color: #f8d7da; color: #721c24;
+            padding: 1rem; margin-bottom: 1rem; border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <div class="logo-icon"></div>
+        <span>RamBap76</span>
+    </header>
+
+    <main class="reset-container">
+        <h1>Reset your password</h1>
+        <p>Type in your registered username to reset password</p>
+
+        <%-- Chỉ hiển thị thông báo lỗi ở đây --%>
+        <c:if test="${not empty requestScope.errorMessage}">
+            <div class="message error">
+                <c:out value="${requestScope.errorMessage}" />
+            </div>
+        </c:if>
+
+        <form action="<c:url value='/forgot-password' />" method="post" class="reset-form">
+            <div class="form-group">
+                <input type="text" class="form-input" name="username" placeholder="Enter username" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+                <span>Next</span>
+                <span class="arrow">&rarr;</span>
+            </button>
+            
+            <a href="<c:url value='/login.jsp' />" class="btn btn-dark">Back to login</a>
+        </form>
+    </main>
+
+    <footer class="page-footer">
+        <a href="#">Terms and conditions</a>
+        <span class="separator">&bull;</span>
+        <a href="#">Privacy policy</a>
+    </footer>
+
+</body>
 </html>

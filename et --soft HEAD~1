@@ -1,0 +1,97 @@
+[33mcommit e45b01db8c3d0c4b471929cd2aef7e9d5b3c3c09[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mlogin4[m[33m)[m
+Author: Peaker04 <kyttde180211@fpt.edu.vn>
+Date:   Thu Jul 10 20:05:55 2025 +0700
+
+    Xong login
+
+[33mcommit fec1609a46bc331355efd359e3d0b38b79fe1806[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Merge: eaa8eae 44e23a5
+Author: Tạ Tuấn Kỳ <Kyttde180211@fpt.edu.vn>
+Date:   Sun Jul 6 21:54:29 2025 +0700
+
+    Merge pull request #4 from Peaker04/login3
+    
+    Login3
+
+[33mcommit 44e23a5c15ce3242d06fa0903a2107c5f1990ebc[m[33m ([m[1;31morigin/login3[m[33m)[m
+Merge: 0882d31 eaa8eae
+Author: Tạ Tuấn Kỳ <Kyttde180211@fpt.edu.vn>
+Date:   Sun Jul 6 21:54:18 2025 +0700
+
+    Merge branch 'main' into login3
+
+[33mcommit 0882d3146116b7fcbf20ba537e8fef2ce17c99be[m[33m ([m[1;32mlogin3[m[33m)[m
+Author: Peaker04 <kyttde180211@fpt.edu.vn>
+Date:   Sun Jul 6 21:44:07 2025 +0700
+
+    shipper
+
+[33mcommit 983077ab417f37605bd1d9388e2445eb914509b4[m
+Author: Peaker04 <kyttde180211@fpt.edu.vn>
+Date:   Sun Jul 6 20:24:42 2025 +0700
+
+    pull shipper
+
+[33mcommit eaa8eaee6598ae99fdea22cedcc4c57faf497cc9[m
+Merge: 7d6afd9 e2f15b0
+Author: Tạ Tuấn Kỳ <Kyttde180211@fpt.edu.vn>
+Date:   Sat Jun 28 16:06:50 2025 +0700
+
+    Merge pull request #3 from Peaker04/shipper
+    
+    shipper Dashboard
+
+[33mcommit e2f15b018732c7fb7f42511a4b57cf7021ab55f9[m[33m ([m[1;31morigin/shipper[m[33m)[m
+Author: ngyien <nguyenptde180215@fpt.edu.vn>
+Date:   Sat Jun 28 15:58:16 2025 +0700
+
+    shipper Dashboard
+
+[33mcommit 7d6afd970e54ee974e78e633873eecdfb5cdce70[m[33m ([m[1;32mlogin2[m[33m)[m
+Author: Peaker04 <kyttde180211@fpt.edu.vn>
+Date:   Thu Jun 26 22:37:55 2025 +0700
+
+    Fix
+
+[33mcommit 60d19cadacc028f3af82997e10123f5e9133b95d[m
+Merge: aa93c12 2359e88
+Author: Tạ Tuấn Kỳ <Kyttde180211@fpt.edu.vn>
+Date:   Thu Jun 26 21:51:19 2025 +0700
+
+    Merge pull request #2 from Peaker04/Login
+    
+    Done Login and Sign Up
+
+[33mcommit 2359e88c81cf1665d82718e0005dbc0cfba3224c[m[33m ([m[1;31morigin/Login[m[33m)[m
+Merge: 50726ff aa93c12
+Author: Tạ Tuấn Kỳ <Kyttde180211@fpt.edu.vn>
+Date:   Thu Jun 26 21:48:30 2025 +0700
+
+    Merge branch 'main' into Login
+
+[33mcommit 50726ff70bb7c767da67bc38b14829bedcacc939[m[33m ([m[1;32mLogin[m[33m)[m
+Author: Peaker04 <kyttde180211@fpt.edu.vn>
+Date:   Thu Jun 26 21:03:26 2025 +0700
+
+    Done Login and Sign Up
+
+[33mcommit aa93c12ea3399c6f45170f73e87adc8e4b062800[m
+Merge: ff14b67 679973f
+Author: Tạ Tuấn Kỳ <Kyttde180211@fpt.edu.vn>
+Date:   Thu Jun 26 20:47:00 2025 +0700
+
+    Merge pull request #1 from Peaker04/tuancm24
+    
+    tuancm24 : Done EmailService
+
+[33mcommit 679973fd9bb3279540605400d13a7f0dd925bccc[m[33m ([m[1;31morigin/tuancm24[m[33m)[m
+Author: tuancm24 <tuancm24@gmail.com>
+Date:   Thu Jun 26 20:33:44 2025 +0700
+
+    tuancm24 : Done EmailService
+
+[33mcommit ff14b67ff9df37ee07e3fa321f12da558e476029[m
+Author: Peaker04 <kyttde180211@fpt.edu.vn>
+Date:   Tue Jun 24 23:18:30 2025 +0700
+
+    Push folder

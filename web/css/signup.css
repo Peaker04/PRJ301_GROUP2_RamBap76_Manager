@@ -18,7 +18,6 @@ body {
 }
 
 /* === Main Layout Container === */
-/* Đổi tên để phù hợp ngữ cảnh nhưng giữ nguyên thuộc tính */
 .signup-container {
     display: flex;
     width: 1440px;
@@ -57,7 +56,7 @@ body {
     max-width: 540px;
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Giảm gap để form gọn hơn */
+    gap: 20px;
 }
 
 /* === Logo === */
@@ -107,12 +106,23 @@ body {
     cursor: pointer;
     text-decoration: none;
     border: none;
+    transition: background-color 0.2s ease, opacity 0.2s ease; /* Thêm transition để hiệu ứng mượt hơn */
 }
 
 .btn-primary {
     background-color: #1A71F6;
     color: #FFFFFF;
-    height: 52px; /* Thêm chiều cao cho nút */
+    height: 52px;
+}
+
+/* ===== PHẦN CSS MỚI THÊM VÀO ===== */
+/* Style cho nút khi nó ở trạng thái bị vô hiệu hóa (có thuộc tính 'disabled').
+  - opacity: 0.6; -> Làm cho nút mờ đi, không "sáng".
+  - cursor: not-allowed; -> Đổi con trỏ chuột để báo hiệu không thể nhấn được.
+*/
+.btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 
@@ -120,7 +130,7 @@ body {
 .signup-form {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Điều chỉnh gap cho form đăng ký */
+    gap: 20px;
 }
 
 .form-group {
@@ -181,7 +191,7 @@ body {
 }
 
 .radio-option input[type="radio"] {
-    display: none; /* Ẩn radio button mặc định */
+    display: none;
 }
 
 .radio-option label {
@@ -200,30 +210,12 @@ body {
     transition: all 0.2s ease-in-out;
 }
 
-/* Style cho radio button khi được chọn */
 .radio-option input[type="radio"]:checked + label {
-    border-color: #8A3FFC; /* Màu tím từ hình ảnh */
-    background-color: #F1E4FF; /* Màu nền tím nhạt */
+    border-color: #8A3FFC;
+    background-color: #F1E4FF;
     color: #8A3FFC;
     position: relative;
 }
-
-/* Tạo vòng tròn bên trong khi được chọn */
-/*.radio-option input[type="radio"]:checked + label::before {
-    content: '';
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    border: 1.6px solid #8A3FFC;
-    border-radius: 50%;
-    background-clip: content-box;
-    padding: 4px;
-    background-color: #8A3FFC;
-}*/
-
 
 /* === NEW: Terms Agreement Checkbox === */
 .terms-agreement {
@@ -231,7 +223,7 @@ body {
     flex-direction: row;
     align-items: center;
     gap: 8px;
-    margin-top: -8px; /* Kéo lên gần hơn một chút */
+    margin-top: -8px;
 }
 
 .terms-agreement input[type="checkbox"] {
@@ -242,7 +234,7 @@ body {
 }
 
 .terms-agreement label {
-    font-weight: 400; /* Chữ thường */
+    font-weight: 400;
     font-size: 14px;
     color: #323130;
 }
@@ -324,4 +316,9 @@ body {
 
 .input-icon.toggle-password {
     cursor: pointer;
+}
+
+.btn[disabled] {
+    opacity: 0.3;
+    cursor: not-allowed;
 }
