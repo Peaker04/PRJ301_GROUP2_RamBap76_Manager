@@ -1,42 +1,31 @@
-//  Đại diện cho mỗi người giao hàng (shipper) trong hệ thống
-//  Làm việc với dữ liệu từ bảng shippers và users
 package model;
 
-
 public class Shipper {
-   // Mã định danh của shipper, dùng để phân biệt shipper này với shipper khác
-    private int id;
-
-    // Tên của shipper, giúp nhận diện shipper khi cần
-    private String name;
-
-    // Khu vực mà shipper phụ trách giao hàng
+    private int userId; // Đây là user_id từ bảng users, cũng là ID liên kết của Shipper
+    private String name; // full_name từ bảng users
     private String area;
-
-    // Mức độ ưu tiên của shipper trong việc nhận đơn hàng (1 = cao nhất, 3 = thấp nhất)
     private int priorityLevel;
-
-    // Thu nhập hàng ngày của shipper (có thể tính toán từ số đơn hàng giao được)
     private double dailyIncome;
 
     public Shipper() {
     }
-    
-    public Shipper(int id, String name, String area, int priorityLevel, double dailyIncome) {
-        this.id = id;
+
+    // Constructor chính xác mà DAO đang gọi
+    public Shipper(int userId, String name, String area, int priorityLevel, double dailyIncome) {
+        this.userId = userId;
         this.name = name;
         this.area = area;
         this.priorityLevel = priorityLevel;
         this.dailyIncome = dailyIncome;
     }
 
-       
-    public int getId() {
-        return id;
+    // Getters và Setters
+    public int getUserId() { // PHẢI CÓ phương thức này
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int userId) { // PHẢI CÓ phương thức này
+        this.userId = userId;
     }
 
     public String getName() {
@@ -70,17 +59,15 @@ public class Shipper {
     public void setDailyIncome(double dailyIncome) {
         this.dailyIncome = dailyIncome;
     }
-    
-     @Override
+
+    @Override
     public String toString() {
         return "Shipper{" +
-                "id=" + id +
+                "userId=" + userId +
                 ", name='" + name + '\'' +
                 ", area='" + area + '\'' +
                 ", priorityLevel=" + priorityLevel +
                 ", dailyIncome=" + dailyIncome +
                 '}';
     }
-    
 }
-

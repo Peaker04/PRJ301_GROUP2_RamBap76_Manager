@@ -63,7 +63,10 @@ public class RequestTransferServlet extends HttpServlet {
             
             // Lấy danh sách shipper khác để chuyển giao
             List<Shipper> availableShippers = shipperDAO.getAllShippersExcept(currentUser.getId());
-            
+            System.out.println("DEBUG: Số lượng shippers: " + availableShippers.size());
+            for (Shipper s : availableShippers) {
+                System.out.println("DEBUG: Shipper (userId): " + s.getUserId() + ", Name: " + s.getName());
+            }
             request.setAttribute("delivery", delivery);
             request.setAttribute("availableShippers", availableShippers);
             request.getRequestDispatcher("/view/shipper/request-transfer.jsp").forward(request, response);

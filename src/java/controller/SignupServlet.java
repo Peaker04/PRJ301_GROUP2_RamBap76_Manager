@@ -11,17 +11,18 @@ import service.UserService;
 
 @WebServlet(name = "SignupServlet", urlPatterns = {"/signup"})
 public class SignupServlet extends HttpServlet {
-    
+
     private final UserService userService = new UserService();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         request.setCharacterEncoding("UTF-8");
 
         String fullName = request.getParameter("fullName");
         String username = request.getParameter("username");
+        String email = request.getParameter("email");
         String pass = request.getParameter("password");
         String confirmPass = request.getParameter("confirmPassword");
         String accountType = request.getParameter("accountType");
@@ -35,6 +36,7 @@ public class SignupServlet extends HttpServlet {
         User newUser = new User();
         newUser.setFullName(fullName);
         newUser.setUsername(username);
+        newUser.setEmail(email);
         newUser.setPassword(pass); // Truyền mật khẩu gốc
         newUser.setRole(accountType.toUpperCase());
 

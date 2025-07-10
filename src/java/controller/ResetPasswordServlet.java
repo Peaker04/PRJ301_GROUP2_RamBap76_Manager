@@ -46,9 +46,11 @@ public class ResetPasswordServlet extends HttpServlet {
         String tokenStr = request.getParameter("token");
         String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
+        System.out.println("Token nhận được: " + tokenStr);
 
         // 1. Kiểm tra mật khẩu có khớp không
         if (newPassword == null || !newPassword.equals(confirmPassword)) {
+            System.out.println("Lỗi: Mật khẩu không khớp.");
             request.setAttribute("token", tokenStr);
             request.setAttribute("errorMessage", "Mật khẩu không khớp.");
             request.getRequestDispatcher("/view/authentication/reset_password.jsp").forward(request, response);
@@ -57,6 +59,7 @@ public class ResetPasswordServlet extends HttpServlet {
 
         // 2. Kiểm tra lại token
         User user = userDAO.findUserByResetToken(UUID.fromString(tokenStr));
+        System.out.println("Lỗi: Token không tìm thấy user khi POST.");
         if (user == null) {
             request.setAttribute("errorMessage", "Yêu cầu không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.");
             request.getRequestDispatcher("/view/authentication/login.jsp").forward(request, response);
@@ -64,11 +67,14 @@ public class ResetPasswordServlet extends HttpServlet {
         }
 
         // 3. Cập nhật mật khẩu và xóa token
+        System.out.println("User ID tìm thấy: " + user.getId() + ". Chuẩn bị cập nhật mật khẩu.");
         boolean success = userDAO.updatePasswordById(user.getId(), newPassword);
+        System.out.println("Kết quả userDAO.updatePasswordById: " + success); // Dòng này rất quan trọng
         if (success) {
             userDAO.clearResetToken(user.getId()); // Xóa token để không dùng lại được
             response.sendRedirect(request.getContextPath() + "/login?message=reset_success");
         } else {
+            System.out.println("Lỗi: Cập nhật thất bại. Chuyển về trang reset.");
             request.setAttribute("token", tokenStr);
             request.setAttribute("errorMessage", "Có lỗi xảy ra, không thể đặt lại mật khẩu.");
             request.getRequestDispatcher("/view/authentication/reset_password.jsp").forward(request, response);

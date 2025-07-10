@@ -3,9 +3,49 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/netbeans/du_an_netbeans/PRJ301_GROUP2_RamBap76/src/java/connect/DBConnection.java</file>
-            <file>file:/E:/netbeans/du_an_netbeans/PRJ301_GROUP2_RamBap76/web/WEB-INF/web.xml</file>
-            <file>file:/E:/netbeans/du_an_netbeans/PRJ301_GROUP2_RamBap76/src/java/service/EmailService.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/authentication/login.jsp</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/LoginServlet.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/dao/UserDAO.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/authentication/profile.jsp</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/css/profile.css</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/css/account.css</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/authentication/account.jsp</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/admin/dashboard.jsp</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/build.xml</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/WEB-INF/web.xml</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/filter/AuthenticationFilter.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/BCrypt/BCryptExample.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/nbproject/genfiles.properties</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/nbproject/private/private.xml</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/service/EmailService.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/GoogleLoginServlet.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/GoogleCallbackServlet.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/shipper/dashboard.jsp</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/ShipperDashboardServlet.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/service/EmailTemplate.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/authentication/forgot_password.jsp</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/ForgotPasswordServlet.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/authentication/email_sended.jsp</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/authentication/reset_password.jsp</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/dao/UserProfileDAO.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/ProfileServlet.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/model/ShipperDebt.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/shipper/request-transfer.jsp</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/model/Shipper.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/dao/ShipperDAO.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/connect/DBConnection.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/authentication/signup.jsp</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/SignupServlet.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/shipper/profile.jsp</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/ProfileShipperServlet.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/view/shipper/notifications.jsp</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/controller/RequestTransferServlet.java</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/nbproject/ant-deploy.xml</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/nbproject/build-impl.xml</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/web/css/dashboard.css</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/resources/config.properties</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/.gitignore</file>
+            <file>file:/E:/NetBeans/RamBap76_Manager_Project/src/java/utils/AppConfig.java</file>
         </group>
     </open-files>
 </project-private>

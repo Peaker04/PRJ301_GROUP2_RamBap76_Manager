@@ -30,15 +30,20 @@
         <listener-class>listener.AppContextListener</listener-class>
     </listener>
 
-    <!-- Shipper Dashboard Servlet -->
-    <servlet>
-        <servlet-name>ShipperDashboardServlet</servlet-name>
-        <servlet-class>controller.ShipperDashboardServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ShipperDashboardServlet</servlet-name>
-        <url-pattern>/shipper/dashboard</url-pattern>
-    </servlet-mapping>
+   <context-param>
+        <param-name>GOOGLE_CLIENT_ID</param-name>
+        <param-value>YOUR_GOOGLE_CLIENT_ID</param-value>
+    </context-param>
+    <context-param>
+        <param-name>GOOGLE_CLIENT_SECRET</param-name>
+        <param-value>YOUR_GOOGLE_CLIENT_SECRET</param-value>
+    </context-param>
+    <context-param>
+        <param-name>GOOGLE_REDIRECT_URI</param-name>
+        <param-value>http://localhost:8080/RamBap76_Manager_Project/google-callback</param-value> 
+    </context-param>
+
+
 
     <!-- Update Delivery Status Servlet -->
     <servlet>
