@@ -1,102 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="RamBap76_Manager_Project" default="dist" basedir=".">
+<project name="RamBap76_Manager_Project" default="default" basedir=".">
+    <description>Builds, tests, and runs the project RamBap76_Manager_Project</description>
+    <import file="nbproject/build-impl.xml"/>
+    
+     <property name="resources.dir" location="resources"/>
 
-    <description>
-        Build file cho dự án RamBap76_Manager.
-    </description>
-
-    <!-- === CÁC THUỘC TÍNH ĐÃ ĐƯỢC CHỈNH SỬA VÀ BỔ SUNG === -->
-    <!-- Thống nhất tên project để khớp với log deploy thành công -->
-    <property name="project.name" value="RamBap76_Manager"/>
-    <property name="project.version" value="1.0"/>
-    <property name="src.dir" location="src"/>
-    <property name="web.dir" location="web"/>
-    <property name="lib.dir" location="${web.dir}/WEB-INF/lib"/>
-    <property name="build.dir" location="build"/>
-    <property name="classes.dir" location="${build.dir}/classes"/>
-    <property name="dist.dir" location="dist"/>
-    <property name="war.file" location="${dist.dir}/${project.name}.war"/>
-
-    <property name="tomcat.home" location="E:\netbeans\tomcat"/>
-    <property name="tomcat.webapps" location="${tomcat.home}/webapps"/>
-
-    <!-- URL để mở trình duyệt -->
-    <property name="run.url" value="http://localhost:8080/${project.name}/login"/>
-
-    <path id="compile.classpath">
-        <fileset dir="${lib.dir}">
-            <include name="*.jar"/>
-        </fileset>
-        <pathelement location="${tomcat.home}/lib/servlet-api.jar"/>
-        <pathelement location="${tomcat.home}/lib/jsp-api.jar"/>
-    </path>
-
-    <!-- === CÁC TARGET CŨ VẪN GIỮ NGUYÊN === -->
-    <target name="init" description="Khởi tạo cấu trúc thư mục build">
-        <tstamp/>
-        <mkdir dir="${build.dir}"/>
-        <mkdir dir="${classes.dir}"/>
-        <mkdir dir="${dist.dir}"/>
-    </target>
-
-    <target name="clean" description="Dọn dẹp các thư mục build và dist">
-        <delete dir="${build.dir}"/>
-        <delete dir="${dist.dir}"/>
-    </target>
-
-    <target name="compile" depends="init" description="Biên dịch các file .java sang .class">
-        <echo message="Biên dịch mã nguồn Java..."/>
-        <javac srcdir="${src.dir}"
-               destdir="${classes.dir}"
-               debug="true"
-               includeantruntime="false"
-               encoding="UTF-8"
-               source="22" target="22">
-            <classpath refid="compile.classpath"/>
-        </javac>
-        <echo message="Biên dịch thành công!"/>
-    </target>
-
-    <target name="dist" depends="compile" description="Tạo file .war từ dự án">
-        <echo message="Bắt đầu đóng gói file ${project.name}.war..."/>
-        <war destfile="${war.file}" webxml="${web.dir}/WEB-INF/web.xml">
-            <fileset dir="${web.dir}"/>
-            <lib dir="${lib.dir}"/>
-            <classes dir="${classes.dir}"/>
-        </war>
-        <echo message="Đã tạo file WAR tại: ${war.file}"/>
-    </target>
-
-    <target name="deploy" depends="dist" description="Triển khai file .war lên server Tomcat">
-        <echo message="Bắt đầu triển khai file ${war.file} tới ${tomcat.webapps}"/>
-        <copy file="${war.file}" todir="${tomcat.webapps}"/>
-        <echo message="Triển khai thành công! Hãy khởi động lại Tomcat nếu cần."/>
-    </target>
-
-    <target name="undeploy" description="Gỡ bỏ ứng dụng khỏi server Tomcat">
-        <echo message="Đang gỡ bỏ ứng dụng khỏi ${tomcat.webapps}"/>
-        <delete file="${tomcat.webapps}/${project.name}.war"/>
-        <delete dir="${tomcat.webapps}/${project.name}"/>
-        <echo message="Đã gỡ bỏ ứng dụng."/>
-    </target>
-
-    <target name="redeploy" depends="undeploy,deploy" description="Gỡ bỏ và triển khai lại ứng dụng"/>
-
-    <!-- === TARGET MỚI ĐỂ TỰ MỞ TRÌNH DUYỆT === -->
-    <target name="open-browser" description="Mở URL của dự án trong trình duyệt mặc định">
-        <echo message="Đang mở ${run.url} trong trình duyệt..."/>
-        <exec executable="cmd" osfamily="windows">
-            <arg line="/c start ${run.url}"/>
-        </exec>
-        <exec executable="open" osfamily="mac">
-            <arg value="${run.url}"/>
-        </exec>
-        <exec executable="xdg-open" osfamily="unix">
-            <arg value="${run.url}"/>
-        </exec>
+    <target name="-post-compile">
+        <echo message="Copying config.properties to ${build.classes.dir}..."/>
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${resources.dir}">
+                <include name="config.properties"/>
+            </fileset>
+        </copy>
+        <echo message="Finished copying config.properties."/>
     </target>
     
-    <!-- === TARGET RUN ĐÃ ĐƯỢC NÂNG CẤP === -->
-    <target name="run" depends="deploy, open-browser" description="Chạy target 'deploy' và tự mở trình duyệt"/>
-
 </project>

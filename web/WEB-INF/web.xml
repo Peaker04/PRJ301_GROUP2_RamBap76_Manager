@@ -30,6 +30,21 @@
         <listener-class>listener.AppContextListener</listener-class>
     </listener>
 
+   <context-param>
+        <param-name>GOOGLE_CLIENT_ID</param-name>
+        <param-value>YOUR_GOOGLE_CLIENT_ID</param-value>
+    </context-param>
+    <context-param>
+        <param-name>GOOGLE_CLIENT_SECRET</param-name>
+        <param-value>YOUR_GOOGLE_CLIENT_SECRET</param-value>
+    </context-param>
+    <context-param>
+        <param-name>GOOGLE_REDIRECT_URI</param-name>
+        <param-value>http://localhost:8080/RamBap76_Manager_Project/google-callback</param-value> 
+    </context-param>
+
+
+
     <!-- Update Delivery Status Servlet -->
     <servlet>
         <servlet-name>UpdateDeliveryStatusServlet</servlet-name>

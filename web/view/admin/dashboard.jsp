@@ -61,7 +61,7 @@
                     <div class="nav-group">
                         <h3 class="nav-title">TOOLS</h3>
                         <ul class="nav-list">
-                            <li><a href="${pageContext.request.contextPath}/view/authentication/profile.jsp" class="nav-item"><i class="fas fa-cog"></i> Account & Settings</a></li>
+                            <li><a href="${pageContext.request.contextPath}/profile" class="nav-item"><i class="fas fa-cog"></i> Account & Settings</a></li>
                             <li><a href="#" class="nav-item"><i class="fas fa-question-circle"></i> Help</a></li>
                             <li class="nav-item-toggle">
                                 <div class="nav-item-label">

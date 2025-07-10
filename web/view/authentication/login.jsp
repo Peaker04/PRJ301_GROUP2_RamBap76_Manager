@@ -33,19 +33,19 @@
                         <%-- Form action points to LoginServlet (Correct) --%>
                         <form action="${pageContext.request.contextPath}/login" method="POST" class="login-form">
 
-                            <button type="button" class="btn btn-google">
+                            <a href="${pageContext.request.contextPath}/login-google" class="btn btn-google" style="text-decoration: none; color: #444; display: flex; align-items: center; justify-content: center;">
                                 <span class="icon">
                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.818 10.045h-9.363v4.364h5.455c-.273 1.455-1.182 2.636-2.545 3.545v2.818h3.545c2.091-1.909 3.273-4.636 3.273-7.727 0-.727-.091-1.364-.182-2z" fill="#4285F4"></path><path d="M12.455 22c2.727 0 5-1 6.545-2.636l-3.545-2.818c-.818.545-2 1-3 1-2.273 0-4.182-1.545-4.818-3.636H4.273v2.909C5.91 20.273 8.91 22 12.455 22z" fill="#34A853"></path><path d="M7.636 13.091c-.182-.545-.273-1.182-.273-1.818s.091-1.273.273-1.818V6.545H4.273C3.455 8.182 3 10.091 3 12s.455 3.818 1.273 5.455l3.363-2.909z" fill="#FBBC05"></path><path d="M12.455 4.545c1.455 0 2.636.545 3.636 1.455l3.182-3.182C17.455 1.182 15.182 0 12.455 0 8.91 0 5.91 1.727 4.273 4.455l3.363 2.909C8.273 5.545 10.182 4.545 12.455 4.545z" fill="#EA4335"></path></svg>
                                 </span>
                                 Sign In with Google
-                            </button>
+                            </a>
 
                             <div class="separator">
                                 <hr>
                                 <span>OR</span>
                                 <hr>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="role">Role</label>
                                 <div class="input-wrapper">

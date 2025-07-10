@@ -1,21 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%
-    // Dữ liệu giả lập cho JSP
+    // Dữ liệu giả lập cho JSP - Giữ nguyên để cấu trúc trang
     String companyName = "Kanky Store";
     String userName = "Guy Hawkins";
     String userRole = "Admin";
     int mailCount = 2;
     int notificationCount = 8;
-
-    // Dữ liệu giả lập cho trang Profile
-    String profileFirstName = "Cameron";
-    String profileLastName = "Williamson";
-    String profileEmail = "cameron@example.com";
-    String profileGender = "Male";
-    String profileBirthday = "23 Desember 2003";
-    String profilePhone = "+62 847 1723 1123";
-    String profileAddress = "Parungkuda, Kab. Sukabumi";
-    String profileCountry = "Indonesia";
 %>
 <!DOCTYPE html>
 <html lang="vi">
@@ -100,122 +92,67 @@
             </div>
         </aside>
 
-        <%-- =================================== --%>
-        <%--       MAIN CONTENT (Thay đổi)       --%>
-        <%-- =================================== --%>
-        <main class="main-content">
-            <header class="navbar">
-                <div class="search-bar">
-                    <input type="text" placeholder="Search product">
-                    <i class="fas fa-search"></i>
-                </div>
-                
-                <div class="navbar-right">
-                    <button class="icon-button">
-                        <i class="fas fa-envelope"></i>
-                        <% if (mailCount > 0) { %>
-                            <span class="notification-badge"><%= mailCount %></span>
-                        <% } %>
-                    </button>
-                    <button class="icon-button">
-                        <i class="fas fa-bell"></i>
-                        <% if (notificationCount > 0) { %>
-                             <span class="notification-badge"><%= notificationCount %></span>
-                        <% } %>
-                    </button>
-                    
-                    <div class="nav-user-profile">
-                        <div class="avatar-container">
-                           <img src="https://i.imgur.com/Xce8p35.png" alt="User Avatar" class="user-avatar">
-                           <span class="status-indicator"></span>
-                        </div>
-                        <div class="user-details">
-                            <span class="user-name"><%= userName %></span>
-                            <span class="user-role"><%= userRole %></span>
-                        </div>
-                    </div>
-                </div>
-            </header>
-            
-            <%-- PHẦN NỘI DUNG CHÍNH CỦA TRANG PROFILE --%>
-            <div class="page-content">
-                 <div class="page-header">
-                    <h1>Account & Settings</h1>
-                    <p class="breadcrumb">Dashboard &gt; <span class="active-breadcrumb">Profile</span></p>
-                </div>
-                
-                <nav class="tabs-nav">
-                    <a href="#" class="tab-link active">Account</a>
-                    <a href="#" class="tab-link">Security</a>
-                    <a href="#" class="tab-link">Notification</a>
-                </nav>
-
+       <main class="main-content">
+             <div class="page-content">
                 <div class="profile-content">
-                    <section class="card">
-                        <h2 class="card-title">Profile Information</h2>
-                        <form>
-                            <div class="profile-picture-section">
-                                <img src="https://i.imgur.com/sC4p1xJ.png" alt="Profile Avatar" class="profile-avatar">
-                                <button type="button" class="btn btn-icon">
-                                    Change Pictures
-                                    <i class="fas fa-pencil-alt"></i>
-                                </button>
-                            </div>
+                    <%-- Form sẽ gửi dữ liệu đến ProfileServlet qua phương thức POST --%>
+                    <form action="${pageContext.request.contextPath}/profile" method="post">
+                        <section class="card">
+                            <h2 class="card-title">Profile Information</h2>
+                            
+                            <%-- Thông báo cập nhật --%>
+                            <c:if test="${not empty message}">
+                                <p style="color: green;">${message}</p>
+                            </c:if>
+                            <c:if test="${not empty error}">
+                                <p style="color: red;">${error}</p>
+                            </c:if>
+
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label for="first-name">First Name</label>
-                                    <input type="text" id="first-name" class="form-control" value="<%= profileFirstName %>">
+                                    <input type="text" id="first-name" name="first_name" class="form-control" value="${profile.firstName}">
                                 </div>
                                 <div class="form-group">
                                     <label for="last-name">Last Name</label>
-                                    <input type="text" id="last-name" class="form-control" value="<%= profileLastName %>">
+                                    <input type="text" id="last-name" name="last_name" class="form-control" value="${profile.lastName}">
                                 </div>
                                 <div class="form-group form-group-full">
                                     <label for="email">Email</label>
-                                    <input type="email" id="email" class="form-control" value="<%= profileEmail %>">
+                                    <input type="email" id="email" name="email" class="form-control" value="${profile.email}">
                                 </div>
                                 <div class="form-group">
                                     <label for="gender">Gender</label>
-                                    <input type="text" id="gender" class="form-control" value="<%= profileGender %>">
-                                </div>
-                                <div class="form-group">
-                                    <label for="birthday">Date Birthday</label>
-                                    <input type="text" id="birthday" class="form-control" value="<%= profileBirthday %>">
+                                    <input type="text" id="gender" name="gender" class="form-control" value="${profile.gender}">
                                 </div>
                             </div>
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">Update</button>
-                                <button type="button" class="btn btn-secondary">Cancel</button>
-                            </div>
-                        </form>
-                    </section>
+                        </section>
 
-                    <section class="card">
-                         <div class="card-header">
-                            <h2 class="card-title">Contact Detail</h2>
-                            <button type="button" class="btn btn-icon">
-                                Edit
-                                <i class="fas fa-pencil-alt"></i>
-                            </button>
+                        <section class="card">
+                             <div class="card-header">
+                                <h2 class="card-title">Contact Detail</h2>
+                             </div>
+                            <div class="form-grid-contact">
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <%-- Dùng thẻ input để hiển thị, có thể cho phép sửa ở đây --%>
+                                    <input type="text" id="phone" name="phone_number" class="form-control" value="${profile.phoneNumber}">
+                                </div>
+                                <div class="form-group form-group-full">
+                                    <label for="address">Address</label>
+                                    <input type="text" id="address" name="address" class="form-control" value="${profile.address}">
+                                </div>
+                            </div>
+                        </section>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                            <button type="button" class="btn btn-secondary">Cancel</button>
                         </div>
-                        <div class="form-grid-contact">
-                            <div class="form-group">
-                                <label for="phone">Phone Number</label>
-                                <input type="text" id="phone" class="form-control" value="<%= profilePhone %>" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="country">Country</label>
-                                <input type="text" id="country" class="form-control" value="<%= profileCountry %>" disabled>
-                            </div>
-                             <div class="form-group form-group-full">
-                                <label for="address">Address</label>
-                                <input type="text" id="address" class="form-control" value="<%= profileAddress %>" disabled>
-                            </div>
-                        </div>
-                    </section>
+                    </form>
                 </div>
             </div>
         </main>
+
     </div>
 </body>
 </html>
