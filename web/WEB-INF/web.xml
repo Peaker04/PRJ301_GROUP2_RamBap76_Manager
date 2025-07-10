@@ -6,7 +6,7 @@
 
         
     <welcome-file-list>
-        <welcome-file>login</welcome-file>
+        <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
     
     <context-param>

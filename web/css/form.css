@@ -1,0 +1,83 @@
+/* === Google Fonts Import === */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
+
+body {
+    background: #f5f6fa;
+}
+.order-form-card {
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 4px 24px 0 rgba(80,80,150,0.10);
+    padding: 24px 36px 24px 36px;
+    margin: 36px auto;
+    max-width: 940px;
+    min-width: 340px;
+}
+.order-form-title {
+    font-weight: bold;
+    font-size: 2.1rem;
+    color: #21243a;
+    margin-bottom: 18px;
+    letter-spacing: -1px;
+}
+.order-form-label {
+    color: #4b5563;
+    font-weight: 500;
+    font-size: 1rem;
+    margin-bottom: 6px;
+}
+.form-control, .form-select {
+    border-radius: 10px !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #20223b;
+    font-size: 1rem;
+    padding: 9px 15px;
+}
+.form-control:focus, .form-select:focus {
+    border-color: #6495ed;
+    box-shadow: 0 0 0 2px #bcd6fa50;
+}
+.order-form-btn {
+    border-radius: 12px;
+    font-weight: 500;
+    padding: 9px 30px;
+    font-size: 1.08rem;
+}
+.order-form-btn-cancel {
+    background: #e5e7eb;
+    color: #222;
+    border-radius: 12px;
+    font-weight: 500;
+    padding: 9px 22px;
+    margin-left: 14px;
+    border: none;
+}
+.add-product-btn {
+    font-size: 0.99rem;
+    border-radius: 8px;
+    padding: 5px 17px;
+    font-weight: 500;
+}
+.remove-product {
+    font-size: 1.3em;
+    color: #ef4444;
+    background: transparent;
+    border: none;
+    margin-left: 5px;
+    padding: 0;
+    margin-top: 4px;
+}
+.customer-add-btn {
+    white-space: nowrap;
+    font-size: 0.99rem;
+    border-radius: 9px;
+    font-weight: 500;
+    padding: 7px 14px;
+    margin-left: 10px;
+    transition: background 0.2s;
+}
+.customer-add-btn i { margin-right: 3px; }
+@media (max-width: 575px) {
+    .order-form-card { padding: 16px 6px; }
+}
