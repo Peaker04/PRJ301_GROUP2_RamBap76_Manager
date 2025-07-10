@@ -32,7 +32,10 @@ public class AuthenticationFilter implements Filter {
                 "/profile",
                 "/ProfileServlet",
                 "/view/authentication/signup.jsp",
-                "/ProfileShipperServlet"
+                "/ProfileShipperServlet",
+                "/chat",
+                "/chatbot"
+                
         ));
         System.out.println("DEBUG Filter: Public URIs initialized: " + publicUris);
     }
