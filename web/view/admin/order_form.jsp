@@ -54,9 +54,7 @@
                         <select name="product_id" class="form-select" required>
                             <option value="">-- Choose Product --</option>
                             <c:forEach var="pro" items="${products}">
-                                <c:if test="${product.is_deleted == 0}">
-                                    <option value="${pro.id}">${pro.name}</option> 
-                                </c:if>
+                                <option value="${pro.id}">${pro.name}</option> 
                             </c:forEach>
                         </select>
                     </div>

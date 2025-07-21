@@ -11,7 +11,7 @@
 <div class="container-xxl px-3 py-3" style="max-width:1200px; max-height: calc(100vh - 120px);">
     <!-- Welcome -->
     <div class="mb-2">
-        <h3 class="fw-bold welcome">Chào Mừng Admin, ${sessionScope.user.fullName}!</h3>
+        <h3 class="fw-bold welcome">Xin chào, ${sessionScope.userProfile.last_name}!</h3>
     </div>
 
     <div class="row g-3">

@@ -49,12 +49,6 @@ public class ReceiptDetailServlet extends HttpServlet {
         try (Connection conn = DBConnection.getConnection()) {
             StationReceiptDAO dao = new StationReceiptDAO(conn);
 
-            if ("delete".equals(action)) {
-                dao.deleteReceipt(id);
-                resp.sendRedirect(req.getContextPath() + "/admin/receipts?deleted=1");
-                return;
-            }
-
             StationReceipt receipt = dao.getReceiptById(id);
             receipt.setStationName(req.getParameter("station_name"));
             receipt.setTransportFee(Double.parseDouble(req.getParameter("transport_fee")));
