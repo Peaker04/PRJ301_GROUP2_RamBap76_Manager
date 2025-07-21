@@ -1,221 +1,223 @@
 package dao;
 
 import connect.DBConnection;
+import java.math.BigDecimal;
 import model.Delivery;
+
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.math.BigDecimal;
+import model.Customer;
+import model.Order;
+import model.StationReceipt;
 
 public class DeliveryDAO {
-    
-    public List<Delivery> getDeliveriesByShipperAndStatus(int shipperId, String status) {
-        List<Delivery> deliveries = new ArrayList<>();
-        String sql = """
-            SELECT d.*, c.name as customer_name, c.phone as customer_phone, 
-                   c.address as customer_address, u.full_name as shipper_name, o.status as order_status
-            FROM deliveries d
-            JOIN orders o ON d.order_id = o.id
-            JOIN customers c ON o.customer_id = c.id
-            JOIN users u ON d.current_shipper_id = u.id
-            WHERE d.current_shipper_id = ? AND d.status = ?
-            ORDER BY d.assigned_time DESC
-            """;
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setInt(1, shipperId);
-            ps.setString(2, status);
-            
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Delivery delivery = mapResultSetToDelivery(rs);
-                    deliveries.add(delivery);
-                }
+
+   public List<Delivery> getDeliveriesByShipper(int shipperId, String status) throws SQLException {
+    String sql = "SELECT d.*, c.name AS customer_name, c.address AS customer_address "
+               + "FROM deliveries d "
+               + "JOIN orders o ON d.order_id = o.id "
+               + "JOIN customers c ON o.customer_id = c.id "
+               + "WHERE d.current_shipper_id = ? AND d.status = ? "
+               + "ORDER BY d.priority_level DESC, d.assigned_time ASC";
+
+    List<Delivery> deliveries = new ArrayList<>();
+
+    try (Connection conn = DBConnection.getConnection(); 
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, shipperId);
+        stmt.setString(2, status);
+
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Customer customer = new Customer();
+                Delivery delivery = new Delivery();
+                delivery.setId(rs.getInt("id"));
+                delivery.setOrderId(rs.getInt("order_id"));
+                delivery.setInitialShipperId(rs.getInt("initial_shipper_id"));
+                delivery.setCurrentShipperId(rs.getInt("current_shipper_id"));
+                delivery.setDeliveryFee(rs.getBigDecimal("delivery_fee"));
+                delivery.setBoxFee(rs.getBigDecimal("box_fee"));
+                delivery.setCollectedAmount(rs.getDouble("collected_amount"));
+                delivery.setStatus(rs.getString("status"));
+                delivery.setActualDeliveryTime(rs.getTimestamp("actual_delivery_time"));
+                delivery.setAssignedTime(rs.getTimestamp("assigned_time"));
+                delivery.setAcceptedTime(rs.getTimestamp("accepted_time"));
+                delivery.setNotes(rs.getString("notes"));
+                delivery.setPriorityLevel(rs.getInt("priority_level"));
+                
+                // Thêm thông tin khách hàng để hiển thị trên giao diện
+                customer.setName(rs.getString("customer_name"));
+                customer.setAddress(rs.getString("customer_address"));
+
+                deliveries.add(delivery);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return deliveries;
     }
-    
-    public Delivery getDeliveryById(int deliveryId) {
-        String sql = """
-            SELECT d.*, c.name as customer_name, c.phone as customer_phone, 
-                   c.address as customer_address, u.full_name as shipper_name, o.status as order_status
-            FROM deliveries d
-            JOIN orders o ON d.order_id = o.id
-            JOIN customers c ON o.customer_id = c.id
-            JOIN users u ON d.current_shipper_id = u.id
-            WHERE d.id = ?
-            """;
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setInt(1, deliveryId);
-            
-            try (ResultSet rs = ps.executeQuery()) {
+    return deliveries;
+}
+
+    public boolean updateDeliveryStatus(int deliveryId, String status, int shipperId) throws SQLException {
+        String sql = "UPDATE deliveries SET status = ?, current_shipper_id = ? WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, status);
+            stmt.setInt(2, shipperId);
+            stmt.setInt(3, deliveryId);
+
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    public boolean acceptDelivery(int deliveryId, int shipperId) throws SQLException {
+        String sql = "UPDATE deliveries SET status = 'IN_TRANSIT', accepted_time = GETDATE() "
+                + "WHERE id = ? AND current_shipper_id = ?";
+
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, deliveryId);
+            stmt.setInt(2, shipperId);
+
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    public boolean completeDelivery(int deliveryId, double collectedAmount) throws SQLException {
+        String sql = "UPDATE deliveries SET status = 'COMPLETED', actual_delivery_time = ?, collected_amount = ? WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+            stmt.setDouble(2, collectedAmount);
+            stmt.setInt(3, deliveryId);
+
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    public Delivery getDeliveryById(int deliveryId) throws SQLException {
+        String sql = "SELECT * FROM deliveries WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, deliveryId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToDelivery(rs);
+                    return mapFullDelivery(rs);
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return null;
     }
-    
-    public boolean updateDeliveryStatus(int deliveryId, String status, LocalDateTime acceptedTime) {
-        String sql = "UPDATE deliveries SET status = ?, accepted_time = ? WHERE id = ?";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, status);
-            ps.setTimestamp(2, acceptedTime != null ? Timestamp.valueOf(acceptedTime) : null);
-            ps.setInt(3, deliveryId);
-            
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+
+    public boolean updateAcceptedTime(int deliveryId, Timestamp acceptedTime) throws SQLException {
+        String sql = "UPDATE deliveries SET accepted_time = ? WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setTimestamp(1, acceptedTime);
+            stmt.setInt(2, deliveryId);
+
+            return stmt.executeUpdate() > 0;
         }
     }
-    
-    public boolean completeDelivery(int deliveryId, LocalDateTime actualDeliveryTime, 
-                                   BigDecimal collectedAmount, int completedShipperId) {
-        String sql = """
-            UPDATE deliveries 
-            SET status = 'COMPLETED', actual_delivery_time = ?, 
-                collected_amount = ?, completed_shipper_id = ?
-            WHERE id = ?
-            """;
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setTimestamp(1, Timestamp.valueOf(actualDeliveryTime));
-            ps.setBigDecimal(2, collectedAmount);
-            ps.setInt(3, completedShipperId);
-            ps.setInt(4, deliveryId);
-            
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public boolean updateOrderStatus(int orderId, String status) {
-        String sql = "UPDATE orders SET status = ? WHERE id = ?";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, status);
-            ps.setInt(2, orderId);
-            
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public boolean updateCurrentShipper(int deliveryId, int newShipperId) {
-        String sql = "UPDATE deliveries SET current_shipper_id = ? WHERE id = ?";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setInt(1, newShipperId);
-            ps.setInt(2, deliveryId);
-            
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public BigDecimal getDailyIncome(int shipperId) {
-        String sql = "SELECT daily_income FROM shippers WHERE user_id = ?";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setInt(1, shipperId);
-            
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getBigDecimal("daily_income");
-                }
+
+    public List<Delivery> getAssignedDeliveries(int shipperId) throws SQLException {
+        String sql = "SELECT "
+                + "d.id, d.order_id, d.initial_shipper_id, d.current_shipper_id, "
+                + "d.completed_shipper_id, d.delivery_fee, d.box_fee, d.collected_amount, "
+                + "d.status, d.actual_delivery_time, d.assigned_time, d.accepted_time, "
+                + "d.notes, d.priority_level, d.estimated_delivery_time, d.station_receipt_id, "
+                + "o.customer_id, o.status AS order_status, o.notes AS order_notes, "
+                + "o.order_date, o.appointment_time, o.priority_delivery_date, "
+                + "c.name AS customer_name, c.phone, c.address, c.latitude, c.longitude, "
+                + "sr.station_name, sr.verified_at "
+                + "FROM deliveries d "
+                + "JOIN orders o ON d.order_id = o.id "
+                + "JOIN customers c ON o.customer_id = c.id "
+                + "LEFT JOIN station_receipts sr ON d.station_receipt_id = sr.id "
+                + "WHERE d.current_shipper_id = ? AND d.status = 'ASSIGNED'";
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, shipperId);
+            ResultSet rs = stmt.executeQuery();
+
+            List<Delivery> deliveries = new ArrayList<>();
+            while (rs.next()) {
+                Delivery delivery = mapFullDelivery(rs);
+                deliveries.add(delivery);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return BigDecimal.ZERO;
-    }
-    
-    public boolean updateDailyIncome(int shipperId, BigDecimal newIncome) {
-        String sql = "UPDATE shippers SET daily_income = ? WHERE user_id = ?";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setBigDecimal(1, newIncome);
-            ps.setInt(2, shipperId);
-            
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            return deliveries;
         }
     }
-    
-    private Delivery mapResultSetToDelivery(ResultSet rs) throws SQLException {
+
+    public Delivery mapDeliveryBasic(ResultSet rs) throws SQLException {
         Delivery delivery = new Delivery();
+
         delivery.setId(rs.getInt("id"));
         delivery.setOrderId(rs.getInt("order_id"));
         delivery.setInitialShipperId(rs.getInt("initial_shipper_id"));
         delivery.setCurrentShipperId(rs.getInt("current_shipper_id"));
-        
-        int completedShipperId = rs.getInt("completed_shipper_id");
-        delivery.setCompletedShipperId(rs.wasNull() ? null : completedShipperId);
-        
         delivery.setDeliveryFee(rs.getBigDecimal("delivery_fee"));
         delivery.setBoxFee(rs.getBigDecimal("box_fee"));
-        delivery.setCollectedAmount(rs.getBigDecimal("collected_amount"));
+
+        double collectedAmount = rs.getDouble("collected_amount");
+        if (rs.wasNull()) {
+            delivery.setCollectedAmount(null);
+        } else {
+            delivery.setCollectedAmount(collectedAmount);
+        }
+
         delivery.setStatus(rs.getString("status"));
-        
-        Timestamp actualDeliveryTime = rs.getTimestamp("actual_delivery_time");
-        delivery.setActualDeliveryTime(actualDeliveryTime != null ? actualDeliveryTime.toLocalDateTime() : null);
-        
-        Timestamp assignedTime = rs.getTimestamp("assigned_time");
-        delivery.setAssignedTime(assignedTime != null ? assignedTime.toLocalDateTime() : null);
-        
-        Timestamp acceptedTime = rs.getTimestamp("accepted_time");
-        delivery.setAcceptedTime(acceptedTime != null ? acceptedTime.toLocalDateTime() : null);
-        
+        delivery.setActualDeliveryTime(rs.getTimestamp("actual_delivery_time"));
+        delivery.setAssignedTime(rs.getTimestamp("assigned_time"));
+        delivery.setAcceptedTime(rs.getTimestamp("accepted_time"));
         delivery.setNotes(rs.getString("notes"));
         delivery.setPriorityLevel(rs.getInt("priority_level"));
-        
-        Timestamp estimatedDeliveryTime = rs.getTimestamp("estimated_delivery_time");
-        delivery.setEstimatedDeliveryTime(estimatedDeliveryTime != null ? estimatedDeliveryTime.toLocalDateTime() : null);
-        
-        int stationReceiptId = rs.getInt("station_receipt_id");
-        delivery.setStationReceiptId(rs.wasNull() ? null : stationReceiptId);
-        
-        // Additional display fields
-        delivery.setCustomerName(rs.getString("customer_name"));
-        delivery.setCustomerPhone(rs.getString("customer_phone"));
-        delivery.setCustomerAddress(rs.getString("customer_address"));
-        delivery.setShipperName(rs.getString("shipper_name"));
-        delivery.setOrderStatus(rs.getString("order_status"));
-        
+
         return delivery;
     }
-} 
+
+    public Order mapOrderFromResultSet(ResultSet rs) throws SQLException {
+        Order order = new Order();
+        order.setId(rs.getInt("order_id"));
+        order.setCustomerId(rs.getInt("customer_id"));
+        order.setStatus(rs.getString("order_status"));
+        order.setOrderDate(rs.getDate("order_date"));
+        order.setAppointmentTime(rs.getTimestamp("appointment_time"));
+        order.setNotes(rs.getString("order_notes"));
+        order.setPriorityDeliveryDate(rs.getDate("priority_delivery_date"));
+        return order;
+    }
+
+    public StationReceipt mapStationReceiptBasic(ResultSet rs) throws SQLException {
+        int stationReceiptId = rs.getInt("station_receipt_id");
+        if (rs.wasNull()) {
+            return null;
+        }
+
+        StationReceipt receipt = new StationReceipt();
+        receipt.setId(stationReceiptId);
+
+        // Nếu câu SQL có thêm các cột này thì map luôn:
+        receipt.setStationName(rs.getString("station_name"));
+        receipt.setVerifiedAt(rs.getTimestamp("verified_at"));
+
+        return receipt;
+    }
+
+    public Delivery mapFullDelivery(ResultSet rs) throws SQLException {
+        Delivery delivery = mapDeliveryBasic(rs);
+        Order order = mapOrderFromResultSet(rs);
+        StationReceipt receipt = mapStationReceiptBasic(rs);
+
+        delivery.setOrder(order);
+        delivery.setStationReceipt(receipt);
+
+        return delivery;
+    }
+
+}

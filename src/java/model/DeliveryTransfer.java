@@ -1,35 +1,18 @@
 package model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class DeliveryTransfer {
+
     private int id;
     private int deliveryId;
     private int fromShipperId;
     private int toShipperId;
-    private LocalDateTime requestTime;
-    private LocalDateTime acceptedTime;
-    private LocalDateTime expirationTime;
+    private Date requestTime;
+    private Date acceptedTime;
     private String reason;
     private String status;
-    
-    // Additional fields for display purposes
-    private String fromShipperName;
-    private String toShipperName;
-    private String deliveryInfo;
 
-    public DeliveryTransfer() {
-    }
-
-    public DeliveryTransfer(int deliveryId, int fromShipperId, int toShipperId, String reason) {
-        this.deliveryId = deliveryId;
-        this.fromShipperId = fromShipperId;
-        this.toShipperId = toShipperId;
-        this.reason = reason;
-        this.status = "PENDING";
-    }
-
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -62,28 +45,20 @@ public class DeliveryTransfer {
         this.toShipperId = toShipperId;
     }
 
-    public LocalDateTime getRequestTime() {
+    public Date getRequestTime() {
         return requestTime;
     }
 
-    public void setRequestTime(LocalDateTime requestTime) {
+    public void setRequestTime(Date requestTime) {
         this.requestTime = requestTime;
     }
 
-    public LocalDateTime getAcceptedTime() {
+    public Date getAcceptedTime() {
         return acceptedTime;
     }
 
-    public void setAcceptedTime(LocalDateTime acceptedTime) {
+    public void setAcceptedTime(Date acceptedTime) {
         this.acceptedTime = acceptedTime;
-    }
-
-    public LocalDateTime getExpirationTime() {
-        return expirationTime;
-    }
-
-    public void setExpirationTime(LocalDateTime expirationTime) {
-        this.expirationTime = expirationTime;
     }
 
     public String getReason() {
@@ -101,39 +76,4 @@ public class DeliveryTransfer {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public String getFromShipperName() {
-        return fromShipperName;
-    }
-
-    public void setFromShipperName(String fromShipperName) {
-        this.fromShipperName = fromShipperName;
-    }
-
-    public String getToShipperName() {
-        return toShipperName;
-    }
-
-    public void setToShipperName(String toShipperName) {
-        this.toShipperName = toShipperName;
-    }
-
-    public String getDeliveryInfo() {
-        return deliveryInfo;
-    }
-
-    public void setDeliveryInfo(String deliveryInfo) {
-        this.deliveryInfo = deliveryInfo;
-    }
-
-    @Override
-    public String toString() {
-        return "DeliveryTransfer{" +
-                "id=" + id +
-                ", deliveryId=" + deliveryId +
-                ", fromShipperId=" + fromShipperId +
-                ", toShipperId=" + toShipperId +
-                ", status='" + status + '\'' +
-                '}';
-    }
-} 
+}

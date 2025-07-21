@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
-    <servlet>
-        <servlet-name>AdminManageShipperServlet</servlet-name>
-        <servlet-class>controller.AdminManageShipperServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>AdminManageShipperServlet</servlet-name>
-        <url-pattern>/AdminManageShipperServlet</url-pattern>
-    </servlet-mapping>
-    
-    
+ 
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
@@ -33,7 +24,7 @@
         <listener-class>listener.AppContextListener</listener-class>
     </listener>
 
-   <context-param>
+    <context-param>
         <param-name>GOOGLE_CLIENT_ID</param-name>
         <param-value>YOUR_GOOGLE_CLIENT_ID</param-value>
     </context-param>
@@ -45,57 +36,14 @@
         <param-name>GOOGLE_REDIRECT_URI</param-name>
         <param-value>http://localhost:8080/RamBap76_Manager_Project/google-callback</param-value> 
     </context-param>
-
-
-
-    <!-- Update Delivery Status Servlet -->
+    
     <servlet>
-        <servlet-name>UpdateDeliveryStatusServlet</servlet-name>
-        <servlet-class>controller.UpdateDeliveryStatusServlet</servlet-class>
+        <servlet-name>AdminManageShipperServlet</servlet-name>
+        <servlet-class>controller.AdminManageShipperServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>UpdateDeliveryStatusServlet</servlet-name>
-        <url-pattern>/shipper/update-delivery-status</url-pattern>
-    </servlet-mapping>
-
-    <!-- Complete Delivery Servlet -->
-    <servlet>
-        <servlet-name>CompleteDeliveryServlet</servlet-name>
-        <servlet-class>controller.CompleteDeliveryServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>CompleteDeliveryServlet</servlet-name>
-        <url-pattern>/shipper/complete-delivery</url-pattern>
-    </servlet-mapping>
-
-    <!-- Request Transfer Servlet -->
-    <servlet>
-        <servlet-name>RequestTransferServlet</servlet-name>
-        <servlet-class>controller.RequestTransferServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>RequestTransferServlet</servlet-name>
-        <url-pattern>/shipper/request-transfer</url-pattern>
-    </servlet-mapping>
-
-    <!-- Handle Transfer Servlet -->
-    <servlet>
-        <servlet-name>HandleTransferServlet</servlet-name>
-        <servlet-class>controller.HandleTransferServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>HandleTransferServlet</servlet-name>
-        <url-pattern>/shipper/handle-transfer</url-pattern>
-    </servlet-mapping>
-
-    <!-- Notifications Servlet -->
-    <servlet>
-        <servlet-name>NotificationsServlet</servlet-name>
-        <servlet-class>controller.NotificationsServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>NotificationsServlet</servlet-name>
-        <url-pattern>/shipper/notifications</url-pattern>
+        <servlet-name>AdminManageShipperServlet</servlet-name>
+        <url-pattern>/AdminManageShipperServlet</url-pattern>
     </servlet-mapping>
 
 </web-app>

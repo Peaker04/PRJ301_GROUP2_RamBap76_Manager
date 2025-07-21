@@ -12,10 +12,8 @@ import jakarta.servlet.http.HttpSession;
 import model.User;
 import model.UserProfile;
 
-
 @WebServlet(name = "ProfileShipperServlet", urlPatterns = {"/ProfileShipperServlet"})
 public class ProfileShipperServlet extends HttpServlet {
-    
 
     private UserProfileDAO userProfileDAO;
 
@@ -34,12 +32,11 @@ public class ProfileShipperServlet extends HttpServlet {
             response.sendRedirect("login.jsp"); // Nếu chưa đăng nhập, chuyển về trang login
             return;
         }
-        
+
         System.out.println("DEBUG ProfileServlet: User ID from session: " + user.getId());
 
         UserProfile profile = userProfileDAO.getUserProfileByUserId(user.getId());
 
-        
         if (profile != null) {
             System.out.println("DEBUG ProfileServlet: UserProfile found.");
             System.out.println("DEBUG ProfileServlet: First Name: " + profile.getFirstName());
@@ -51,11 +48,10 @@ public class ProfileShipperServlet extends HttpServlet {
         } else {
             System.out.println("DEBUG ProfileServlet: UserProfile is NULL for user ID: " + user.getId());
         }
+
         
-        request.setAttribute("profile", profile);
-        request.getRequestDispatcher("/view/shipper/profile.jsp").forward(request, response);
-        
-        
+        request.setAttribute("contentPage", "/view/shipper/profile.jsp");
+        request.getRequestDispatcher("/view/common/shipper_layout.jsp").forward(request, response);
     }
 
     @Override
@@ -63,7 +59,6 @@ public class ProfileShipperServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        
 
         if (user == null) {
             response.sendRedirect("login.jsp");
@@ -85,9 +80,7 @@ public class ProfileShipperServlet extends HttpServlet {
         System.out.println("DEBUG: phoneNumber = " + phoneNumber);
         System.out.println("DEBUG: address = " + address);
         System.out.println("DEBUG: userId from session = " + user.getId());
-        
-        
-        
+
         // test thông báo trường hợp lỗi update
 //        if ("fail".equalsIgnoreCase(firstName)) {
 //        request.setAttribute("error", "Simulated update failure for testing.");
@@ -95,7 +88,6 @@ public class ProfileShipperServlet extends HttpServlet {
 //        request.getRequestDispatcher("/view/shipper/profile.jsp").forward(request, response);
 //        return;
 //    }
-        
         // Tạo đối tượng UserProfile để cập nhật
         UserProfile profileToSave = new UserProfile(user.getId(), firstName, lastName, email, gender, phoneNumber, address);
 
@@ -126,7 +118,6 @@ public class ProfileShipperServlet extends HttpServlet {
 
         // Sau khi cập nhật, tải lại trang với dữ liệu mới
         doGet(request, response);
-        
-        
+
     }
 }

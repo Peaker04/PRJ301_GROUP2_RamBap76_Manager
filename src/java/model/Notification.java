@@ -1,29 +1,16 @@
 package model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Notification {
+
     private int id;
     private int shipperId;
     private String message;
     private String type;
-    private LocalDateTime createdAt;
-    private boolean isRead;
-    
-    // Additional field for display purposes
-    private String shipperName;
+    private Date createdAt;
+    private boolean read;
 
-    public Notification() {
-    }
-
-    public Notification(int shipperId, String message, String type) {
-        this.shipperId = shipperId;
-        this.message = message;
-        this.type = type;
-        this.isRead = false;
-    }
-
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -56,38 +43,19 @@ public class Notification {
         this.type = type;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
     public boolean isRead() {
-        return isRead;
+        return read;
     }
 
     public void setRead(boolean read) {
-        isRead = read;
+        this.read = read;
     }
-
-    public String getShipperName() {
-        return shipperName;
-    }
-
-    public void setShipperName(String shipperName) {
-        this.shipperName = shipperName;
-    }
-
-    @Override
-    public String toString() {
-        return "Notification{" +
-                "id=" + id +
-                ", shipperId=" + shipperId +
-                ", message='" + message + '\'' +
-                ", type='" + type + '\'' +
-                ", isRead=" + isRead +
-                '}';
-    }
-} 
+}
