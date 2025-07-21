@@ -24,8 +24,10 @@
     
     <target name="-post-compile">
         <echo message="Copying config.properties to ${build.classes.dir}..."/>
-        <copy todir="${build.classes.dir}" overwrite="true">
-            <fileset dir="${resources.dir}" includes="config.properties"/>
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${resources.dir}">
+                <include name="config.properties"/>
+            </fileset>
         </copy>
         <echo message="Finished copying config.properties."/>
         

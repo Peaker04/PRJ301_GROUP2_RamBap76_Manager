@@ -46,8 +46,8 @@
             <% session.removeAttribute("successMessage"); %>
         </c:if>
 
-        <a href="<c:url value='/login.jsp'/>" class="btn btn-primary">CONTACT SUPPORT</a>
-        <a href="<c:url value='/login.jsp'/>" class="btn btn-dark">BACK TO LOGIN</a>
+        <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-primary">CONTACT SUPPORT</a>
+        <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-dark">BACK TO LOGIN</a>
     </main>
 
     <footer class="page-footer">

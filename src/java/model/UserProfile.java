@@ -23,7 +23,16 @@ public class UserProfile {
         this.phoneNumber = phoneNumber;
         this.address = address;
     }
-
+    
+    
+     public String getLast_name() {
+        return this.lastName;
+    }
+    
+    public void setLast_name(String last_name) {
+        this.lastName = last_name;
+    }
+    
     // Getters and Setters
     public int getId() {
         return id;
