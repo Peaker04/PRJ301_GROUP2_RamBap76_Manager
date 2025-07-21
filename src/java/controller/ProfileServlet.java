@@ -49,7 +49,8 @@ public class ProfileServlet extends HttpServlet {
         } else {
             System.out.println("DEBUG ProfileServlet: UserProfile is NULL for user ID: " + user.getId());
         }
-
+        
+        session.setAttribute("userProfile", profile);
         request.setAttribute("contentPage", "/view/authentication/profile.jsp");
         request.getRequestDispatcher("/view/common/admin_layout.jsp").forward(request, response);
     }

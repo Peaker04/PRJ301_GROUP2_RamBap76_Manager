@@ -15,7 +15,7 @@ public class UserProfileDAO {
     }
 
     // Lấy thông tin profile dựa trên user_id
-    public UserProfile getUserProfileByUserId(int userId) {
+    public static UserProfile getUserProfileByUserId(int userId) {
         UserProfile profile = null;
         String sql = "SELECT * FROM UserProfiles WHERE user_id = ?";
         // BƯỚC 3: Lấy kết nối trong từng phương thức sử dụng try-with-resources

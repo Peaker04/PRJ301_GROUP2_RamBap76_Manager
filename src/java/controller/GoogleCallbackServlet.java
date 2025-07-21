@@ -69,7 +69,7 @@ public class GoogleCallbackServlet extends HttpServlet {
 
             UserDAO userDAO = new UserDAO();
             User user = userDAO.findByEmail(email);
-
+              
             if (user == null) {
                 System.out.println("Không tìm thấy người dùng với email " + email + ". Đang tạo người dùng mới.");
                 user = userDAO.createGoogleUser(email, name);

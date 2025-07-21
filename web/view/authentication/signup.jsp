@@ -54,28 +54,33 @@
                                     <input type="text" id="username" name="username" class="input-field" placeholder="Enter your username" required value="${param.username}">
                                 </div>
                             </div>
-                                
+
                             <div class="form-group">
                                 <label for="email">Email</label>
                                 <div class="input-wrapper">
                                     <input type="email" id="email" name="email" class="input-field" placeholder="Enter your email" required value="${param.email}">
                                 </div>
                             </div>
-                                
+
+                            <!-- Password -->
                             <div class="form-group">
                                 <label for="password">Password</label>
                                 <div class="input-wrapper">
                                     <input type="password" id="password" name="password" class="input-field" placeholder="Create your password" required>
                                     <span class="input-icon toggle-password">
+                                        <!-- Đặt SVG mặc định là "mắt mở" -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                                     </span>
                                 </div>
                             </div>
+
+                            <!-- Confirm Password -->
                             <div class="form-group">
                                 <label for="confirmPassword">Confirm Password</label>
                                 <div class="input-wrapper">
-                                    <input type="password" id="confirmPassword" name="confirmPassword" class="input-field" placeholder="Confirm Password" required>
+                                    <input type="password" id="confirmPassword" name="confirmPassword" class="input-field" placeholder="Confirm password" required>
                                     <span class="input-icon toggle-password">
+                                        <!-- SVG giống như ở trên -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                                     </span>
                                 </div>
@@ -112,36 +117,49 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                // --- PHẦN CODE CŨ ĐỂ ẨN/HIỆN PASSWORD (GIỮ NGUYÊN) ---
-                const eyeIcon = `<svg xmlns="http://www.w3.org/2000/svg" ... </svg>`;
-                const eyeOffIcon = `<svg xmlns="http://www.w3.org/2000/svg" ... </svg>`;
-                const togglePasswordIcons = document.querySelectorAll('.toggle-password');
-                togglePasswordIcons.forEach(icon => {
-                    // ... code ẩn/hiện password ...
-                });
+            // Biểu tượng mắt mở
+            const eyeIcon = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+            </svg>`;
+            // Biểu tượng mắt đóng
+            const eyeOffIcon = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
+                <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5
+                        c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/>
+                <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12
+                        s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/>
+                <line x1="2" y1="2" x2="22" y2="22"/>
+            </svg>`;
+            // Lấy tất cả các phần tử có class toggle-password
+            const togglePasswordIcons = document.querySelectorAll('.toggle-password');
+            togglePasswordIcons.forEach(icon => {
+            icon.addEventListener('click', function () {
+            const input = this.previousElementSibling;
+            if (input.type === 'password') {
+            input.type = 'text';
+            this.innerHTML = eyeOffIcon;
+            } else {
+            input.type = 'password';
+            this.innerHTML = eyeIcon;
+            }
+            });
+            });
+            // --- XỬ LÝ CHECKBOX CHẤP NHẬN ĐIỀU KHOẢN ---
+            const termsCheckbox = document.getElementById('terms');
+            const createButton = document.getElementById('createAccountBtn');
+            function updateButtonState() {
+            createButton.disabled = !termsCheckbox.checked;
+            }
 
-
-                // --- PHẦN CODE MỚI ĐỂ XỬ LÝ NÚT CREATE ACCOUNT ---
-
-                // 1. Lấy ra phần tử checkbox và nút create account bằng ID
-                const termsCheckbox = document.getElementById('terms');
-                const createButton = document.getElementById('createAccountBtn');
-
-                // 2. Tạo một hàm để cập nhật trạng thái của nút
-                function updateButtonState() {
-                    // Gán trạng thái 'disabled' của nút bằng phủ định trạng thái 'checked' của checkbox
-                    // - Nếu checkbox được tick (checked = true) => !true là false => nút không bị disabled
-                    // - Nếu checkbox không được tick (checked = false) => !false là true => nút bị disabled
-                    createButton.disabled = !termsCheckbox.checked;
-                }
-
-                // 3. Lắng nghe sự kiện "thay đổi" trên checkbox
-                // Mỗi khi bạn tick hoặc bỏ tick, hàm updateButtonState sẽ được gọi
-                termsCheckbox.addEventListener('change', updateButtonState);
-
-                // 4. Gọi hàm này ngay khi trang vừa tải xong
-                // để thiết lập trạng thái ban đầu cho nút (bị vô hiệu hóa vì checkbox chưa tick)
-                updateButtonState();
+            termsCheckbox.addEventListener('change', updateButtonState);
+            updateButtonState();
             });
         </script>
     </body>

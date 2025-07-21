@@ -316,7 +316,14 @@ body {
 
 .input-icon.toggle-password {
     cursor: pointer;
+    z-index: 2;
+    pointer-events: auto;
 }
+
+.input-icon.toggle-password svg {
+    pointer-events: none; /* Cho phép click vào vùng bao ngoài */
+}
+
 
 .btn[disabled] {
     opacity: 0.3;

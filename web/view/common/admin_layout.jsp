@@ -53,7 +53,7 @@
             <div class="user-info">
                 <img src="${pageContext.request.contextPath}/image/avatar-default.png" alt="Avatar"> <%--Chỉnh profile để get được avt người dùng--%>
                 <div>
-                    <strong>${sessionScope.user.fullName}</strong><br/>
+                    <strong>${sessionScope.userProfile.last_name}</strong><br/>
                     <small>Admin</small>
                 </div>
                 <a href="${pageContext.request.contextPath}/logout" style="margin-left: 10px; color: red;">Log out</a>
