@@ -1,5 +1,6 @@
 package controller;
 
+import dao.ShipperDAO;
 import dao.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -38,6 +39,22 @@ public class LoginServlet extends HttpServlet {
                 // SUCCESS: Role matches, proceed with login.
                 HttpSession session = request.getSession();
                 session.setAttribute("user", account);
+
+                if ("SHIPPER".equals(actualRole)) {
+                    try {
+                        // Lấy thông tin shipper từ user_id
+                        int shipperId = ShipperDAO.getShipperIdByUserId(account.getId());
+
+                        if (shipperId > 0) {
+                            session.setAttribute("shipper_id", shipperId);
+                            System.out.println("DEBUG: Shipper ID set in session: " + shipperId);
+                        } else {
+                            System.err.println("ERROR: Shipper not found for user ID: " + account.getId());
+                        }
+                    } catch (Exception e) {
+                        System.err.println("ERROR retrieving shipper info: " + e.getMessage());
+                    }
+                }
 
                 // Redirect based on the verified role.
                 if ("ADMIN".equals(actualRole)) {
