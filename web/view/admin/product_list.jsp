@@ -64,29 +64,31 @@
                 </thead>
                 <tbody>
                     <c:forEach var="pro" items="${products}">
-                        <tr>
-                            <td>
-                                <input type="checkbox" class="product-check" value="${pro.id}">
-                            </td>
-                            <td>${pro.id}</td>
-                            <td>
-                                <a href="${pageContext.request.contextPath}/admin/products/detail?id=${pro.id}" class="fw-semibold text-primary text-decoration-none">
-                                    ${pro.name}
-                                </a>
-                            </td>
-                            <td>${pro.stock}</td>
-                            <td>
-                                <a href="${pageContext.request.contextPath}/admin/products/detail?id=${pro.id}" class="icon-action text-primary" title="View"><i class="bi bi-eye"></i></a>
-                                <a href="${pageContext.request.contextPath}/admin/products/detail?id=${pro.id}&edit=1" class="icon-action text-warning" title="Edit"><i class="bi bi-pencil-square"></i></a>
-                                <form action="${pageContext.request.contextPath}/admin/products/detail" method="post" style="display:inline;" onsubmit="return confirm('Xóa sản phẩm này?');">
-                                    <input type="hidden" name="id" value="${pro.id}"/>
-                                    <input type="hidden" name="action" value="delete"/>
-                                    <button type="submit" class="icon-action text-danger btn btn-link p-0 m-0" title="Delete">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                        <c:if test="${pro.is_deleted == 0}">
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="product-check" value="${pro.id}">
+                                </td>
+                                <td>${pro.id}</td>
+                                <td>
+                                    <a href="${pageContext.request.contextPath}/admin/products/detail?id=${pro.id}" class="fw-semibold text-primary text-decoration-none">
+                                        ${pro.name}
+                                    </a>
+                                </td>
+                                <td>${pro.stock}</td>
+                                <td>
+                                    <a href="${pageContext.request.contextPath}/admin/products/detail?id=${pro.id}" class="icon-action text-primary" title="View"><i class="bi bi-eye"></i></a>
+                                    <a href="${pageContext.request.contextPath}/admin/products/detail?id=${pro.id}&edit=1" class="icon-action text-warning" title="Edit"><i class="bi bi-pencil-square"></i></a>
+                                    <form action="${pageContext.request.contextPath}/admin/products/detail" method="post" style="display:inline;" onsubmit="return confirm('Xóa sản phẩm này?');">
+                                        <input type="hidden" name="id" value="${pro.id}"/>
+                                        <input type="hidden" name="action" value="delete"/>
+                                        <button type="submit" class="icon-action text-danger btn btn-link p-0 m-0" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:if>
                     </c:forEach>
                 </tbody>
             </table>

@@ -86,14 +86,7 @@
                             </td>
                             <td>
                                 <a href="${pageContext.request.contextPath}/admin/receipts/detail?id=${rc.id}" class="icon-action text-primary" title="View"><i class="bi bi-eye"></i></a>
-                                <a href="${pageContext.request.contextPath}/admin/receipts/detail?id=${rc.id}&edit=1" class="icon-action text-warning" title="Edit"><i class="bi bi-pencil-square"></i></a>
-                                <form action="${pageContext.request.contextPath}/admin/receipts/detail" method="post" style="display:inline;" onsubmit="return confirm('Xóa phiếu nhập này?');">
-                                    <input type="hidden" name="id" value="${rc.id}"/>
-                                    <input type="hidden" name="action" value="delete"/>
-                                    <button type="submit" class="icon-action text-danger btn btn-link p-0 m-0" title="Delete">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>                          
+                                <a href="${pageContext.request.contextPath}/admin/receipts/detail?id=${rc.id}&edit=1" class="icon-action text-warning" title="Edit"><i class="bi bi-pencil-square"></i></a>                     
                             </td>
                         </tr>
                     </c:forEach>
@@ -157,15 +150,6 @@
             checkAll.checked = false;
             updateMultiActionBar();
         });
-
-        deleteBtn.addEventListener('click', function() {
-            let ids = Array.from(document.querySelectorAll('.receipt-check:checked')).map(cb => cb.value);
-            if (ids.length === 0) return;
-            if (!confirm('Bạn chắc chắn muốn xóa các phiếu nhập đã chọn?')) return;
-            deleteIds.value = ids.join(',');
-            deleteForm.submit();
-        });
-
         updateMultiActionBar();
     });
 </script>
