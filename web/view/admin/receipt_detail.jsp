@@ -20,11 +20,6 @@
                     <i class="bi bi-pencil-square"></i> Edit
                 </a>
             </c:if>
-            <form action="${pageContext.request.contextPath}/admin/receipts/detail" method="post" class="d-inline" onsubmit="return confirm('Xác nhận xóa phiếu nhập này?');">
-                <input type="hidden" name="id" value="${receipt.id}">
-                <input type="hidden" name="action" value="delete">
-                <button class="btn btn-danger"><i class="bi bi-trash"></i> Delete</button>
-            </form>
         </div>
     </div>
     <form action="detail" method="post" id="receiptEditForm">

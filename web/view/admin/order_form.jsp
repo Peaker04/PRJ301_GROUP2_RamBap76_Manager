@@ -27,7 +27,7 @@
         <div class="mb-3">
             <label class="order-form-label">Status</label>
             <select name="status" class="form-select" required>
-                <c:forEach var="s" items="${['NEW','DELIVERING','DELIVERED','URGENT','APPOINTMENT']}">
+                <c:forEach var="s" items="${['NEW','URGENT','APPOINTMENT']}">
                     <option value="${s}">${s}</option>
                 </c:forEach>
             </select>
@@ -54,7 +54,9 @@
                         <select name="product_id" class="form-select" required>
                             <option value="">-- Choose Product --</option>
                             <c:forEach var="pro" items="${products}">
-                                <option value="${pro.id}">${pro.name}</option>
+                                <c:if test="${product.is_deleted == 0}">
+                                    <option value="${pro.id}">${pro.name}</option> 
+                                </c:if>
                             </c:forEach>
                         </select>
                     </div>
