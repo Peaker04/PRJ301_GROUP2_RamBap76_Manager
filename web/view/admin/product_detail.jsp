@@ -13,11 +13,6 @@
             <a href="${pageContext.request.contextPath}/admin/products" class="btn btn-secondary me-2">
                 <i class="bi bi-arrow-left"></i> Back
             </a>
-            <c:if test="${!isEdit}">
-                <a href="?id=${product.id}&edit=1" class="btn btn-warning me-2">
-                    <i class="bi bi-pencil-square"></i> Edit
-                </a>
-            </c:if>
             <form action="${pageContext.request.contextPath}/admin/products/detail" method="post" class="d-inline" onsubmit="return confirm('Xác nhận xóa sản phẩm này?');">
                 <input type="hidden" name="id" value="${product.id}">
                 <input type="hidden" name="action" value="delete">
@@ -38,79 +33,64 @@
                 </div>
                 <div class="col-md-6 mb-2">
                     <label>Product Name</label>
-                    <c:choose>
-                        <c:when test="${isEdit}">
-                            <input type="text" name="name" class="form-control" value="${product.name}" required maxlength="50">
-                        </c:when>
-                        <c:otherwise>
-                            <input type="text" class="form-control" value="${product.name}" disabled>
-                        </c:otherwise>
-                    </c:choose>
+                    <input type="text" class="form-control" value="${product.name}" disabled>
                 </div>
             </div>
             <div class="mb-2">
                 <label>Total Stock</label>
                 <input type="text" class="form-control" value="${product.stock}" disabled>
             </div>
-            <c:if test="${isEdit}">
-                <div class="mt-3">
-                    <button class="btn btn-success px-4" type="submit"><i class="bi bi-save"></i> Save Changes</button>
-                    <a href="?id=${product.id}" class="btn btn-secondary ms-2">Cancel</a>
-                </div>
-            </c:if>
         </div>
-        <c:if test="${!isEdit}">
-            <!-- History of warehouse receipts for this product -->
-            <div class="detail-card p-4">
-                <h5 class="mb-3">Station Receipt History</h5>
-                <table class="table table-bordered align-middle mb-0">
-                    <thead class="table-light">
+        <!-- History of warehouse receipts for this product -->
+        <div class="detail-card p-4">
+            <h5 class="mb-3">Station Receipt History</h5>
+            <table class="table table-bordered align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Batch ID</th>
+                        <th>Quantity</th>
+                        <th>Station</th>
+                        <th>Receipt Date</th>
+                        <th>Expiration Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="batch" items="${importHistory}">
                         <tr>
-                            <th>Batch ID</th>
-                            <th>Quantity</th>
-                            <th>Station</th>
-                            <th>Receipt Date</th>
-                            <th>Expiration Date</th>
+                            <td>${batch.receiptId}</td>
+                            <td>${batch.quantity}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty batch.stationReceipt.stationName}">
+                                        ${batch.stationReceipt.stationName}
+                                    </c:when>
+                                    <c:otherwise>None</c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty batch.stationReceipt && not empty batch.stationReceipt.receiptDate}">
+                                        <fmt:formatDate value="${batch.stationReceipt.receiptDate}" pattern="dd/MM/yyyy"/>
+                                    </c:when>
+                                    <c:otherwise>None</c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty batch.stationReceipt && not empty batch.stationReceipt.expirationDate}">
+                                        <fmt:formatDate value="${batch.stationReceipt.expirationDate}" pattern="dd/MM/yyyy"/>                                        </c:when>
+                                    <c:otherwise>None</c:otherwise>
+                                </c:choose>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="batch" items="${importHistory}">
-                            <tr>
-                                <td>${batch.receiptId}</td>
-                                <td>${batch.quantity}</td>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${not empty batch.stationReceipt.stationName}">
-                                            ${batch.stationReceipt.stationName}
-                                        </c:when>
-                                        <c:otherwise>None</c:otherwise>
-                                    </c:choose>
-                                </td>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${not empty batch.stationReceipt && not empty batch.stationReceipt.receiptDate}">
-                                            <fmt:formatDate value="${batch.stationReceipt.receiptDate}" pattern="dd/MM/yyyy"/>
-                                        </c:when>
-                                        <c:otherwise>None</c:otherwise>
-                                    </c:choose>
-                                </td>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${not empty batch.stationReceipt && not empty batch.stationReceipt.expirationDate}">
-                                            <fmt:formatDate value="${batch.stationReceipt.expirationDate}" pattern="dd/MM/yyyy"/>                                        </c:when>
-                                        <c:otherwise>None</c:otherwise>
-                                    </c:choose>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                        <c:if test="${empty receipts}">
-                            <tr>
-                                <td colspan="5" class="text-center text-muted">No station receipt history for this product.</td>
-                            </tr>
-                        </c:if>
-                    </tbody>
-                </table>
-            </div>
-        </c:if>
+                    </c:forEach>
+                    <c:if test="${empty receipts}">
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No station receipt history for this product.</td>
+                        </tr>
+                    </c:if>
+                </tbody>
+            </table>
+        </div>
     </form>
 </div>

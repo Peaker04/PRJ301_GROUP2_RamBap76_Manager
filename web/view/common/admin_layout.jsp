@@ -38,14 +38,6 @@
            class="${fn:contains(uri, '/admin/products') ? 'active' : ''}">
             <i class="bi bi-box2-heart"></i> Product
         </a>
-        <a href="${pageContext.request.contextPath}/admin/reports"
-           class="${fn:contains(uri, '/admin/reports') ? 'active' : ''}">
-            <i class="bi bi-graph-up-arrow"></i> Reports
-        </a>
-        <a href="${pageContext.request.contextPath}/admin/support"
-           class="${fn:contains(uri, '/admin/support') ? 'active' : ''}">
-            <i class="bi bi-headset"></i> Support
-        </a>
         <a href="${pageContext.request.contextPath}/profile"
            class="${fn:contains(uri, '/profile') ? 'active' : ''}">
             <i class="bi bi-gear"></i> Account & Settings
@@ -59,8 +51,7 @@
             <input type="text" placeholder="Search..."
                    style="padding: 8px 12px; width: 300px; border: 1px solid #ddd; border-radius: 6px;">
             <div class="user-info">
-                <i class="bi bi-bell"></i>
-                <img src="${pageContext.request.contextPath}/image/Login_logo.png" alt="Avatar"> <%--Chỉnh profile để get được avt người dùng--%>
+                <img src="${pageContext.request.contextPath}/image/avatar-default.png" alt="Avatar"> <%--Chỉnh profile để get được avt người dùng--%>
                 <div>
                     <strong>${sessionScope.user.fullName}</strong><br/>
                     <small>Admin</small>

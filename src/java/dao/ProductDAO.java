@@ -168,7 +168,7 @@ public class ProductDAO {
     }
     
     public int countProducts(String search) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM V_ProductStock WHERE 1=1";
+        String sql = "SELECT COUNT(*) FROM V_ProductStock WHERE is_deleted = 0";
         List<Object> params = new ArrayList<>();
         if (search != null && !search.isEmpty()) {
             sql += " AND product_name LIKE ?";
@@ -185,7 +185,7 @@ public class ProductDAO {
     public List<Product> getProductsByPage(String search, String sort, int page, int size) throws SQLException {
         List<Product> list = new ArrayList<>();
         int offset = (page-1)*size;
-        String sql = "SELECT * FROM V_ProductStock WHERE 1=1";
+        String sql = "SELECT * FROM V_ProductStock WHERE is_deleted = 0";
         List<Object> params = new ArrayList<>();
         if (search != null && !search.isEmpty()) {
             sql += " AND product_name LIKE ?";

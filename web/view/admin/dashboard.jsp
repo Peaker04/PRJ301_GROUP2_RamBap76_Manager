@@ -6,7 +6,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <div class="dashboard-container" style="max-width: 1200px;">
-    <h2 class="welcome">Chào Mừng Admin, ${sessionScope.user.fullName}!</h2>
+    <h2 class="welcome">Xin chào, ${sessionScope.user.fullName}!</h2>
     <div class="dashboard-content">
         <div class="dashboard-main">
             <div class="dashboard-chart-box">
@@ -29,7 +29,7 @@
             <ol class="top-users-list">
                 <c:forEach var="u" items="${topUsers}" varStatus="i">
                     <li>
-                        <img src="${pageContext.request.contextPath}/images/avatar-default.png" class="top-user-avatar"/>
+                        <img src="${pageContext.request.contextPath}/image/avatar-default.png" class="top-user-avatar"/>
                         <div>
                             <span class="top-user-name">${u.name}</span><br>
                             <span class="top-user-orders">${u.totalOrders} orders</span>
