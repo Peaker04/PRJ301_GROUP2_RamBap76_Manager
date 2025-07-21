@@ -34,8 +34,9 @@ public class AuthenticationFilter implements Filter {
                 "/view/authentication/signup.jsp",
                 "/ProfileShipperServlet",
                 "/chat",
-                "/chatbot"
-                
+                "/chatbot",
+                "/shipper/login",
+                "/shipper/forgot-password"
         ));
         System.out.println("DEBUG Filter: Public URIs initialized: " + publicUris);
     }
@@ -53,7 +54,19 @@ public class AuthenticationFilter implements Filter {
         boolean isPublicResource = publicUris.contains(uri)
                 || uri.startsWith("/assets/")
                 || uri.startsWith("/css/")
-                || uri.startsWith("/image/");
+                || uri.startsWith("/js/")
+                || uri.startsWith("/image/")
+                || uri.startsWith("/vendor/")
+                || uri.startsWith("/WEB-INF/tags/")
+                || uri.endsWith(".css")
+                || uri.endsWith(".js")
+                || uri.endsWith(".png")
+                || uri.endsWith(".jpg")
+                || uri.endsWith(".gif")
+                || uri.endsWith(".ico")
+                || uri.endsWith(".woff")
+                || uri.endsWith(".woff2")
+                || uri.endsWith(".ttf");
 
         if (isPublicResource) {
             System.out.println("DEBUG Filter: URI is a public resource or static file. Allowing access.");
@@ -67,11 +80,11 @@ public class AuthenticationFilter implements Filter {
 
         // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang login
         if (user == null) {
+            System.out.println("DEBUG Filter: User not logged in. Redirecting to login.");
             response.sendRedirect(contextPath + "/login");
             return;
         }
 
-        // --- PHẦN LOGIC ĐƯỢC CẢI TIẾN ---
         // Người dùng đã đăng nhập, tiến hành kiểm tra quyền truy cập (Authorization)
         String role = user.getRole();
         String accessDeniedUrl = contextPath + "/view/authentication/access_denied.jsp";
@@ -83,18 +96,27 @@ public class AuthenticationFilter implements Filter {
             if (!"ADMIN".equals(role)) {
                 System.out.println("DEBUG Filter: Access DENIED for URI " + uri + ". User role is " + role + ", not ADMIN.");
                 response.sendRedirect(accessDeniedUrl);
-                return; // Đã sửa: Thêm return để kết thúc xử lý
+                return;
             }
-        } // 2. Kiểm tra các đường dẫn dành cho SHIPPER (ADMIN cũng có quyền)
+        } // 2. Kiểm tra các đường dẫn dành cho SHIPPER
         else if (uri.startsWith("/shipper")) {
+            // Cho phép cả ADMIN và SHIPPER truy cập khu vực shipper
             if (!"SHIPPER".equals(role) && !"ADMIN".equals(role)) {
                 System.out.println("DEBUG Filter: Access DENIED for URI " + uri + ". User role is " + role + ", not SHIPPER or ADMIN.");
                 response.sendRedirect(accessDeniedUrl);
                 return;
             }
+
+            // Đặc biệt cho phép shipper truy cập các URL của họ
+            if ("SHIPPER".equals(role)) {
+                // Cho phép tất cả các URL bắt đầu bằng /shipper
+                System.out.println("DEBUG Filter: Allowing SHIPPER access to " + uri);
+                chain.doFilter(request, response);
+                return;
+            }
         }
 
-        // 3. Nếu không thuộc các đường dẫn có yêu cầu đặc biệt, cho phép truy cập
+        // 3. Các URL chung cho tất cả người dùng đã đăng nhập
         // (Ví dụ: /profile, /logout, /change-password, etc.)
         chain.doFilter(request, response);
     }

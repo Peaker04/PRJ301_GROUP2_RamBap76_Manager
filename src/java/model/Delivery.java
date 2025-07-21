@@ -1,48 +1,27 @@
 package model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Delivery {
+
     private int id;
     private int orderId;
     private int initialShipperId;
     private int currentShipperId;
-    private Integer completedShipperId;
     private BigDecimal deliveryFee;
     private BigDecimal boxFee;
-    private BigDecimal collectedAmount;
+    private Double collectedAmount;
     private String status;
-    private LocalDateTime actualDeliveryTime;
-    private LocalDateTime assignedTime;
-    private LocalDateTime acceptedTime;
+    private Date actualDeliveryTime;
+    private Date assignedTime;
+    private Date acceptedTime;
     private String notes;
     private int priorityLevel;
-    private LocalDateTime estimatedDeliveryTime;
-    private Integer stationReceiptId;
-    
-    // Additional fields for display purposes
-    private String customerName;
-    private String customerPhone;
-    private String customerAddress;
-    private String shipperName;
-    private String orderStatus;
+    private Order order;
+    private StationReceipt stationReceipt;
+    private Customer customer;
 
-    public Delivery() {
-    }
-
-    public Delivery(int id, int orderId, int initialShipperId, int currentShipperId, 
-                   BigDecimal deliveryFee, BigDecimal boxFee, String status) {
-        this.id = id;
-        this.orderId = orderId;
-        this.initialShipperId = initialShipperId;
-        this.currentShipperId = currentShipperId;
-        this.deliveryFee = deliveryFee;
-        this.boxFee = boxFee;
-        this.status = status;
-    }
-
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -75,14 +54,6 @@ public class Delivery {
         this.currentShipperId = currentShipperId;
     }
 
-    public Integer getCompletedShipperId() {
-        return completedShipperId;
-    }
-
-    public void setCompletedShipperId(Integer completedShipperId) {
-        this.completedShipperId = completedShipperId;
-    }
-
     public BigDecimal getDeliveryFee() {
         return deliveryFee;
     }
@@ -99,11 +70,11 @@ public class Delivery {
         this.boxFee = boxFee;
     }
 
-    public BigDecimal getCollectedAmount() {
+    public Double getCollectedAmount() {
         return collectedAmount;
     }
 
-    public void setCollectedAmount(BigDecimal collectedAmount) {
+    public void setCollectedAmount(Double collectedAmount) {
         this.collectedAmount = collectedAmount;
     }
 
@@ -115,27 +86,27 @@ public class Delivery {
         this.status = status;
     }
 
-    public LocalDateTime getActualDeliveryTime() {
+    public Date getActualDeliveryTime() {
         return actualDeliveryTime;
     }
 
-    public void setActualDeliveryTime(LocalDateTime actualDeliveryTime) {
+    public void setActualDeliveryTime(Date actualDeliveryTime) {
         this.actualDeliveryTime = actualDeliveryTime;
     }
 
-    public LocalDateTime getAssignedTime() {
+    public Date getAssignedTime() {
         return assignedTime;
     }
 
-    public void setAssignedTime(LocalDateTime assignedTime) {
+    public void setAssignedTime(Date assignedTime) {
         this.assignedTime = assignedTime;
     }
 
-    public LocalDateTime getAcceptedTime() {
+    public Date getAcceptedTime() {
         return acceptedTime;
     }
 
-    public void setAcceptedTime(LocalDateTime acceptedTime) {
+    public void setAcceptedTime(Date acceptedTime) {
         this.acceptedTime = acceptedTime;
     }
 
@@ -154,70 +125,22 @@ public class Delivery {
     public void setPriorityLevel(int priorityLevel) {
         this.priorityLevel = priorityLevel;
     }
-
-    public LocalDateTime getEstimatedDeliveryTime() {
-        return estimatedDeliveryTime;
+    
+     public void setOrder(Order order) {
+        this.order = order;
     }
 
-    public void setEstimatedDeliveryTime(LocalDateTime estimatedDeliveryTime) {
-        this.estimatedDeliveryTime = estimatedDeliveryTime;
+    public void setStationReceipt(StationReceipt stationReceipt) {
+        this.stationReceipt = stationReceipt;
     }
 
-    public Integer getStationReceiptId() {
-        return stationReceiptId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setStationReceiptId(Integer stationReceiptId) {
-        this.stationReceiptId = stationReceiptId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public String getCustomerPhone() {
-        return customerPhone;
-    }
-
-    public void setCustomerPhone(String customerPhone) {
-        this.customerPhone = customerPhone;
-    }
-
-    public String getCustomerAddress() {
-        return customerAddress;
-    }
-
-    public void setCustomerAddress(String customerAddress) {
-        this.customerAddress = customerAddress;
-    }
-
-    public String getShipperName() {
-        return shipperName;
-    }
-
-    public void setShipperName(String shipperName) {
-        this.shipperName = shipperName;
-    }
-
-    public String getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(String orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
-    @Override
-    public String toString() {
-        return "Delivery{" +
-                "id=" + id +
-                ", orderId=" + orderId +
-                ", status='" + status + '\'' +
-                ", currentShipperId=" + currentShipperId +
-                '}';
-    }
-} 
+    
+    
+}

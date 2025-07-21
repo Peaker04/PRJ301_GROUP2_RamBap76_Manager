@@ -11,7 +11,7 @@ import model.Order;
 import model.OrderDetail;
 
 public class OrderDAO {
-    
+
     private Connection conn;
 
     public OrderDAO(Connection conn) {
@@ -38,7 +38,7 @@ public class OrderDAO {
             sort = "desc";
         }
         sql += " ORDER BY o.order_date " + sort.toUpperCase();
-        
+
         PreparedStatement ps = conn.prepareStatement(sql);
 
         // Set params động
@@ -64,41 +64,106 @@ public class OrderDAO {
         }
         return list;
     }
-    
+
     public void createOrder(int customerId, String status, Timestamp appointmentTime, String notes, Date priorityDeliveryDate,
-        List<Integer> productIds, List<Integer> quantities) throws SQLException {
+            List<Integer> productIds, List<Integer> quantities) throws SQLException {
+        // Tạo đơn hàng
         String sqlOrder = "INSERT INTO orders (customer_id, status, appointment_time, notes, priority_delivery_date) VALUES (?, ?, ?, ?, ?)";
         String sqlOrderDetail = "INSERT INTO order_details (order_id, product_id, quantity) VALUES (?, ?, ?)";
+
         try (
-            PreparedStatement psOrder = conn.prepareStatement(sqlOrder, Statement.RETURN_GENERATED_KEYS);
-            PreparedStatement psDetail = conn.prepareStatement(sqlOrderDetail)
-        ) {
+                PreparedStatement psOrder = conn.prepareStatement(sqlOrder, Statement.RETURN_GENERATED_KEYS); PreparedStatement psDetail = conn.prepareStatement(sqlOrderDetail)) {
+            // Thiết lập tham số cho đơn hàng
             psOrder.setInt(1, customerId);
             psOrder.setString(2, status);
-            if (appointmentTime != null)
+            if (appointmentTime != null) {
                 psOrder.setTimestamp(3, appointmentTime);
-            else
+            } else {
                 psOrder.setNull(3, Types.TIMESTAMP);
+            }
             psOrder.setString(4, notes);
-            if (priorityDeliveryDate != null)
+            if (priorityDeliveryDate != null) {
                 psOrder.setDate(5, priorityDeliveryDate);
-            else
+            } else {
                 psOrder.setNull(5, Types.DATE);
+            }
+
+            // Thực thi tạo đơn hàng
             psOrder.executeUpdate();
-            ResultSet rs = psOrder.getGeneratedKeys();
-            if (rs.next()) {
-                int orderId = rs.getInt(1);
-                for (int i = 0; i < productIds.size(); i++) {
-                    psDetail.setInt(1, orderId);
-                    psDetail.setInt(2, productIds.get(i));
-                    psDetail.setInt(3, quantities.get(i));
-                    psDetail.addBatch();
+
+            // Lấy ID của đơn hàng vừa tạo
+            int orderId;
+            try (ResultSet rs = psOrder.getGeneratedKeys()) {
+                if (!rs.next()) {
+                    throw new SQLException("Creating order failed, no ID obtained.");
                 }
-                psDetail.executeBatch();
+                orderId = rs.getInt(1);
+            }
+
+            // Tạo chi tiết đơn hàng
+            for (int i = 0; i < productIds.size(); i++) {
+                psDetail.setInt(1, orderId);
+                psDetail.setInt(2, productIds.get(i));
+                psDetail.setInt(3, quantities.get(i));
+                psDetail.addBatch();
+            }
+            psDetail.executeBatch();
+
+            // Lấy địa chỉ khách hàng
+            String customerAddress = getCustomerAddress(customerId);
+
+            // Gọi stored procedure để lấy shipper phù hợp
+            int shipperId = getShipperForArea(customerAddress);
+//
+//            // Tạo bản ghi delivery
+//            createDelivery(orderId, shipperId);
+        }
+    }
+
+// Phương thức helper để lấy địa chỉ khách hàng
+    private String getCustomerAddress(int customerId) throws SQLException {
+        String sql = "SELECT address FROM customers WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("address");
+                } else {
+                    throw new SQLException("Customer not found with ID: " + customerId);
+                }
             }
         }
     }
+
+// Phương thức helper để gọi stored procedure
+    private int getShipperForArea(String customerAddress) throws SQLException {
+    String sql = "{call dbo.sp_GetShipperForArea(?, ?)}"; // 1 input, 1 output
     
+    try (CallableStatement cs = conn.prepareCall(sql)) {
+        cs.setString(1, customerAddress);
+        cs.registerOutParameter(2, Types.INTEGER); // Đăng ký tham số OUTPUT
+        cs.execute();
+        
+        int shipperId = cs.getInt(2); // Lấy giá trị từ tham số OUTPUT
+        if (shipperId == 0) {
+            throw new SQLException("No shipper found for area: " + customerAddress);
+        }
+        return shipperId;
+    }
+}
+
+// Phương thức helper để tạo delivery
+    private void createDelivery(int orderId, int shipperId) throws SQLException {
+        String sql = "INSERT INTO deliveries (order_id, initial_shipper_id, current_shipper_id, status, assigned_time) "
+                + "VALUES (?, ?, ?, 'ASSIGNED', GETDATE())";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            ps.setInt(2, shipperId);
+            ps.setInt(3, shipperId);
+            ps.executeUpdate();
+        }
+    }
+
     public Order getOrderById(int orderId) throws SQLException {
         String sql = "SELECT o.*, c.name as customer_name, c.phone, c.address FROM orders o JOIN customers c ON o.customer_id = c.id WHERE o.id = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
@@ -122,7 +187,7 @@ public class OrderDAO {
         }
         return null;
     }
-    
+
     public List<OrderDetail> getOrderDetails(int orderId) throws SQLException {
         List<OrderDetail> details = new ArrayList<>();
         String sql = "SELECT od.*, p.name FROM order_details od JOIN products p ON od.product_id = p.id WHERE od.order_id = ?";
@@ -139,31 +204,33 @@ public class OrderDAO {
         }
         return details;
     }
-    
+
     public void updateOrder(int id, int customerId, String status, java.sql.Timestamp appointmentTime, String notes, java.sql.Date priorityDeliveryDate) throws SQLException {
         String sql = "UPDATE orders SET customer_id=?, status=?, appointment_time=?, notes=?, priority_delivery_date=? WHERE id=?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, customerId);
         ps.setString(2, status);
-        if (appointmentTime != null)
+        if (appointmentTime != null) {
             ps.setTimestamp(3, appointmentTime);
-        else
+        } else {
             ps.setNull(3, Types.TIMESTAMP);
+        }
         ps.setString(4, notes);
-        if (priorityDeliveryDate != null)
+        if (priorityDeliveryDate != null) {
             ps.setDate(5, priorityDeliveryDate);
-        else
+        } else {
             ps.setNull(5, Types.DATE);
+        }
         ps.setInt(6, id);
         ps.executeUpdate();
     }
-    
+
     public void updateOrderItems(int orderId, List<Integer> productIds, List<Integer> quantities) throws SQLException {
-        
-        if(productIds == null || productIds.isEmpty()) {
+
+        if (productIds == null || productIds.isEmpty()) {
             throw new SQLException("Order must have at least 1 item.");
         }
-        
+
         String deleteSQL = "DELETE FROM order_details WHERE order_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(deleteSQL)) {
             ps.setInt(1, orderId);
@@ -185,15 +252,14 @@ public class OrderDAO {
     public void deleteOrder(int orderId) throws SQLException {
         String sql1 = "DELETE FROM order_details WHERE order_id = ?";
         String sql2 = "DELETE FROM orders WHERE id = ?";
-        try (PreparedStatement ps1 = conn.prepareStatement(sql1);
-             PreparedStatement ps2 = conn.prepareStatement(sql2)) {
+        try (PreparedStatement ps1 = conn.prepareStatement(sql1); PreparedStatement ps2 = conn.prepareStatement(sql2)) {
             ps1.setInt(1, orderId);
             ps1.executeUpdate();
             ps2.setInt(1, orderId);
             ps2.executeUpdate();
         }
     }
-    
+
     public int countOrders(String status, String search) throws SQLException {
         String sql = "SELECT COUNT(*) FROM orders o JOIN customers c ON o.customer_id = c.id WHERE 1=1";
         List<Object> params = new ArrayList<>();
@@ -204,10 +270,14 @@ public class OrderDAO {
         if (search != null && !search.isEmpty()) {
             sql += " AND (CAST(o.id AS NVARCHAR) LIKE ? OR c.name LIKE ? OR o.notes LIKE ?)";
             String q = "%" + search + "%";
-            params.add(q); params.add(q); params.add(q);
+            params.add(q);
+            params.add(q);
+            params.add(q);
         }
         PreparedStatement ps = conn.prepareStatement(sql);
-        for (int i = 0; i < params.size(); i++) ps.setObject(i + 1, params.get(i));
+        for (int i = 0; i < params.size(); i++) {
+            ps.setObject(i + 1, params.get(i));
+        }
         ResultSet rs = ps.executeQuery();
         return rs.next() ? rs.getInt(1) : 0;
     }
@@ -224,7 +294,9 @@ public class OrderDAO {
         if (search != null && !search.isEmpty()) {
             sql += " AND (CAST(o.id AS NVARCHAR) LIKE ? OR c.name LIKE ? OR o.notes LIKE ?)";
             String q = "%" + search + "%";
-            params.add(q); params.add(q); params.add(q);
+            params.add(q);
+            params.add(q);
+            params.add(q);
         }
         if (sort == null || (!sort.equalsIgnoreCase("asc") && !sort.equalsIgnoreCase("desc"))) {
             sort = "desc";
@@ -234,7 +306,9 @@ public class OrderDAO {
         params.add(size);
 
         PreparedStatement ps = conn.prepareStatement(sql);
-        for (int i = 0; i < params.size(); i++) ps.setObject(i + 1, params.get(i));
+        for (int i = 0; i < params.size(); i++) {
+            ps.setObject(i + 1, params.get(i));
+        }
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             Order o = new Order();
@@ -252,7 +326,7 @@ public class OrderDAO {
         }
         return list;
     }
-    
+
     public List<Order> getOrdersByCustomer(int customerId, String sort) throws SQLException {
         List<Order> list = new ArrayList<>();
         String sql = "SELECT * FROM orders WHERE customer_id = ? ORDER BY order_date " + ("asc".equalsIgnoreCase(sort) ? "ASC" : "DESC");
@@ -283,7 +357,7 @@ public class OrderDAO {
         """;
         Map<String, Integer> map = new LinkedHashMap<>();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, numMonths-1);
+            ps.setInt(1, numMonths - 1);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 map.put(rs.getString(1), rs.getInt(2));
@@ -292,4 +366,3 @@ public class OrderDAO {
         return map;
     }
 }
-

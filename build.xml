@@ -1,18 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="RamBap76_Manager_Project" default="default" basedir=".">
     <description>Builds, tests, and runs the project RamBap76_Manager_Project</description>
-    <import file="nbproject/build-impl.xml"/>
     
-     <property name="resources.dir" location="resources"/>
-
-    <target name="-post-compile">
-        <echo message="Copying config.properties to ${build.classes.dir}..."/>
-        <copy todir="${build.classes.dir}">
-            <fileset dir="${resources.dir}">
-                <include name="config.properties"/>
-            </fileset>
-        </copy>
-        <echo message="Finished copying config.properties."/>
+    <!-- SỬA TÊN THƯ MỤC WEB TỪ "Web Pages" THÀNH "web" -->
+    <property name="web.dir" location="web"/>
+    <property name="webinf.lib.dir" location="${web.dir}/WEB-INF/lib"/>
+    
+    <!-- SỬA ĐƯỜNG DẪN COPYLIBS -->
+    <property name="libs.CopyLibs.classpath" 
+              location="${webinf.lib.dir}/copylibs.jar"/>
+    
+    <target name="-init-taskdefs">
+        <available file="${libs.CopyLibs.classpath}" property="copylibs.available"/>
+        <fail unless="copylibs.available">
+            CopyLibs not found at: ${libs.CopyLibs.classpath}
+            Please ensure the file exists in WEB-INF/lib
+        </fail>
+        <taskdef classpath="${libs.CopyLibs.classpath}" 
+                 resource="org/netbeans/modules/java/j2seproject/copylibstask/antlib.xml"/>
     </target>
     
+    <property name="resources.dir" location="resources"/>
+    
+    <target name="-post-compile">
+        <echo message="Copying config.properties to ${build.classes.dir}..."/>
+        <copy todir="${build.classes.dir}" overwrite="true">
+            <fileset dir="${resources.dir}" includes="config.properties"/>
+        </copy>
+        <echo message="Finished copying config.properties."/>
+        
+        <!-- Copy libraries -->
+        <echo message="Copying libraries to ${build.web.dir}/WEB-INF/lib..."/>
+        <copy todir="${build.web.dir}/WEB-INF/lib" overwrite="true">
+            <fileset dir="${webinf.lib.dir}" includes="*.jar"/>
+        </copy>
+    </target>
+    
+    <import file="nbproject/build-impl.xml"/>
 </project>
