@@ -33,12 +33,11 @@ public class ProfileServlet extends HttpServlet {
             response.sendRedirect("login.jsp"); // Nếu chưa đăng nhập, chuyển về trang login
             return;
         }
-        
+
         System.out.println("DEBUG ProfileServlet: User ID from session: " + user.getId());
 
         UserProfile profile = userProfileDAO.getUserProfileByUserId(user.getId());
 
-        
         if (profile != null) {
             System.out.println("DEBUG ProfileServlet: UserProfile found.");
             System.out.println("DEBUG ProfileServlet: First Name: " + profile.getFirstName());
@@ -50,9 +49,9 @@ public class ProfileServlet extends HttpServlet {
         } else {
             System.out.println("DEBUG ProfileServlet: UserProfile is NULL for user ID: " + user.getId());
         }
-        
-        request.setAttribute("profile", profile);
-        request.getRequestDispatcher("/view/authentication/profile.jsp").forward(request, response);
+
+        request.setAttribute("contentPage", "/view/authentication/profile.jsp");
+        request.getRequestDispatcher("/view/common/admin_layout.jsp").forward(request, response);
     }
 
     @Override

@@ -80,6 +80,24 @@ public class ShipperDAO {
         }
         return null;
     }
+    
+    
+    public static int getShipperIdByUserId(int userId) throws SQLException {
+        String sql = "SELECT user_id FROM shippers WHERE user_id = ?";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, userId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("user_id");
+                }
+            }
+        }
+        return -1; // Không tìm thấy
+    }
 
     public void updateShipper(Shipper s) throws SQLException {
         String sql = "UPDATE shippers SET area = ?, priority_level = ?, daily_income = ? WHERE user_id = ?";

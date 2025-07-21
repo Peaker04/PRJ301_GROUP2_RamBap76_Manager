@@ -1,3 +1,7 @@
+
+/* === Google Fonts Import === */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
+
 /* --- Global & Variables --- */
 :root {
     --bg-primary: #FFFFFF;
@@ -10,7 +14,6 @@
     --active-bg: #D9EDFF;
     --notification-bg: #EA3030;
     --status-online: #23A149;
-    --font-family: 'Plus Jakarta Sans', sans-serif;
     --border-radius: 12px;
 }
 
@@ -21,7 +24,7 @@
 }
 
 body {
-    font-family: var(--font-family);
+    font-family: 'Inter', sans-serif;
     background-color: var(--bg-secondary);
     color: var(--text-primary);
 }
@@ -38,18 +41,6 @@ ul {
 /* --- Main Layout --- */
 .dashboard-container {
     display: flex;
-}
-
-/* --- Sidebar --- */
-.sidebar {
-    width: 280px;
-    height: 100vh;
-    background-color: var(--bg-primary);
-    padding: 32px 16px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-right: 1px solid var(--border-color);
 }
 
 .logo {
@@ -531,4 +522,58 @@ input:checked + .slider:before {
     border-radius: 50%;
     font-size: 14px;
     cursor: pointer;
+}
+
+body {
+    background: #f5f6fa;
+}
+
+.dash-card {
+    border-radius: 18px !important;
+    background: #fff !important;
+    box-shadow: 0 2px 18px 0 rgba(80,80,150,0.06) !important;
+    border: none !important;
+    min-height: 80px;
+}
+.dash-card.chart-line {
+    min-height: 350px;
+    max-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.welcome {
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.top-users-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.top-users-list li {
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+
+.top-user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid #eee;
+}
+
+.top-user-name {
+    font-weight: 600;
+}
+
+.top-user-orders {
+    color: #888;
+    font-size: 0.97rem;
 }
