@@ -35,7 +35,8 @@ public class AuthenticationFilter implements Filter {
                 "/ProfileServlet",
                 "/ProfileShipperServlet",
                 "/chat",
-                "/chatbot"
+                "/chatbot",
+                "/debt-history"
         ));
         System.out.println("DEBUG Filter: Public URIs initialized: " + publicUris);
     }

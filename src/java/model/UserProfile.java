@@ -33,6 +33,14 @@ public class UserProfile {
         this.lastName = last_name;
     }
     
+    public String getFirst_name() {
+        return this.firstName;
+    }
+    
+    public void setFirst_name(String first_name) {
+        this.firstName = first_name;
+    }
+    
     // Getters and Setters
     public int getId() {
         return id;

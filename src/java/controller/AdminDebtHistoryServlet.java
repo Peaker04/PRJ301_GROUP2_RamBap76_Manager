@@ -17,16 +17,37 @@ public class AdminDebtHistoryServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            int shipperId = Integer.parseInt(req.getParameter("shipperId"));
-            java.sql.Date date = java.sql.Date.valueOf(req.getParameter("date"));
+            String shipperIdParam = req.getParameter("shipperId");
+            String dateParam = req.getParameter("date");
 
-            List<DebtHistory> historyList = debtDAO.getDebtHistory(shipperId, date);
+            java.sql.Date date;
+            if (dateParam == null || dateParam.isEmpty()) {
+                // Mặc định: ngày hiện tại
+                date = new java.sql.Date(System.currentTimeMillis());
+            } else {
+                date = java.sql.Date.valueOf(dateParam);  // có thể ném IllegalArgumentException
+            }
+
+            List<DebtHistory> historyList;
+
+            if (shipperIdParam != null && !shipperIdParam.isEmpty()) {
+                int shipperId = Integer.parseInt(shipperIdParam);
+                historyList = debtDAO.getDebtHistory(shipperId, date);
+            } else {
+                historyList = debtDAO.getDebtHistory(date); // overloaded method
+            }
 
             req.setAttribute("historyList", historyList);
-            req.getRequestDispatcher("/view/admin/debt-history.jsp").forward(req, resp);
+//            req.setAttribute("contentPage", "/view/admin/debt-history.jsp");
+//            req.getRequestDispatcher("/view/common/admin_layout.jsp").forward(req, resp);
+
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new ServletException("Lỗi khi lấy lịch sử thay đổi công nợ", e);
+            throw new ServletException("Lỗi khi lấy lịch sử công nợ", e);
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Tham số shipperId không hợp lệ");
+        } catch (IllegalArgumentException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Định dạng ngày không hợp lệ (yyyy-MM-dd)");
         }
     }
 }

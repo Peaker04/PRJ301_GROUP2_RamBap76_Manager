@@ -46,6 +46,7 @@ public class ProfileServlet extends HttpServlet {
             System.out.println("DEBUG ProfileServlet: Gender: " + profile.getGender());
             System.out.println("DEBUG ProfileServlet: Phone Number: " + profile.getPhoneNumber());
             System.out.println("DEBUG ProfileServlet: Address: " + profile.getAddress());
+            request.setAttribute("profile", profile);
         } else {
             System.out.println("DEBUG ProfileServlet: UserProfile is NULL for user ID: " + user.getId());
         }

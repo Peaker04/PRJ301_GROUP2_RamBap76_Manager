@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 @WebServlet(name = "ChatServlet", urlPatterns = {"/chat"})
 public class ChatServlet extends HttpServlet {
 
-    private  ChatService chatService;
+    private ChatService chatService;
 
     @Override
     public void init() {
@@ -32,23 +32,28 @@ public class ChatServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("=== Request Info ===");
+        System.out.println("Context Path: " + request.getContextPath());
+        System.out.println("Request URI: " + request.getRequestURI());
+        System.out.println("Servlet Path: " + request.getServletPath());
+
         try {
             System.out.println("ChatServlet: POST request received"); // Debug log
-            
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
             String userMessage = request.getParameter("message");
             System.out.println("ChatServlet: Message parameter: " + userMessage); // Debug log
 
             if (userMessage != null && !userMessage.trim().isEmpty()) {
                 String aiResponse = chatService.generateResponse(userMessage);
                 System.out.println("ChatServlet: AI Response: " + aiResponse); // Debug log
-                
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
+
+                response.setContentType("application/json; charset=UTF-8");
 
                 PrintWriter out = response.getWriter();
                 String jsonResponse = "{\"response\":\"" + escapeJson(aiResponse) + "\"}";
                 System.out.println("ChatServlet: JSON Response: " + jsonResponse); // Debug log
-                
+
                 out.print(jsonResponse);
                 out.flush();
             } else {
@@ -57,18 +62,17 @@ public class ChatServlet extends HttpServlet {
                 response.getWriter().write("{\"error\":\"Message is required\"}");
             }
         } catch (Exception e) {
-            System.out.println("ChatServlet: Error occurred: " + e.getMessage()); // Debug log
-            e.printStackTrace();
+            System.out.println("ChatServlet Error: " + e.getMessage());
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\":\"Server error: " + e.getMessage() + "\"}");
+            response.getWriter().write("{\"error\":\"Ollama service unavailable\"}");
         }
     }
 
     private String escapeJson(String input) {
         return input.replace("\\", "\\\\")
-                    .replace("\"", "\\\"")
-                    .replace("\n", "\\n")
-                    .replace("\r", "\\r")
-                    .replace("\t", "\\t");
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
     }
 }

@@ -39,9 +39,9 @@
             <input type="text" placeholder="Search..."
                    style="padding: 8px 12px; width: 300px; border: 1px solid #ddd; border-radius: 6px;">
             <div class="user-info">
-                <img src="${pageContext.request.contextPath}/image/Login_logo.png" alt="Avatar"> <%--Chỉnh profile để get được avt người dùng--%>
+                <img src="${pageContext.request.contextPath}/image/avatar-default.png" alt="Avatar"> <%--Chỉnh profile để get được avt người dùng--%>
                 <div>
-                    <strong>${sessionScope.user.fullName}</strong><br/>
+                    <strong>${sessionScope.userProfile.first_name}</strong><br/>
                     <small>Shipper</small>
                 </div>
                 <a href="${pageContext.request.contextPath}/logout" style="margin-left: 10px; color: red;">Log out</a>
