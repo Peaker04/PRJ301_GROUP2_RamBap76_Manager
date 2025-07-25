@@ -21,7 +21,7 @@
         </div>
         <div class="mb-3">
             <label class="order-form-label">Phone</label>
-            <input type="text" name="phone" class="form-control" value="${customer.phone}" required/>
+            <input type="tel" name="phone" class="form-control" pattern="[0-9]{10}" value="${customer.phone}" required/>
         </div>
         <div class="mb-3">
             <label class="order-form-label">Address</label>

@@ -8,6 +8,11 @@
     <div class="d-flex align-items-center justify-content-between mb-3">
         <div class="order-form-title mb-0">Create Receipt</div>
     </div>
+    <c:if test="${not empty error}">
+        <div class="alert alert-danger" role="alert">
+            ${error}
+        </div>
+    </c:if>
     <form action="${pageContext.request.contextPath}/admin/receipts/create" method="post" id="receiptForm">
         <div class="mb-3">
             <label class="order-form-label">Receipt Date</label>
@@ -72,6 +77,27 @@
             row.querySelector('select').name = "product_id_" + idx;
             row.querySelector('input[name="quantity"]').name = "quantity_" + idx;
         });
+    };
+    
+    document.getElementById('receiptForm').onsubmit = function(e) {
+        let valid = true;
+        let rows = document.querySelectorAll('#productList .product-row');
+        rows.forEach((row, idx) => {
+            let qtyInput = row.querySelector('input[name="quantity"]');
+            let quantity = parseInt(qtyInput.value || "0");
+            row.querySelector('select').name = "product_id_" + idx;
+            qtyInput.name = "quantity_" + idx;
+            if (quantity > 30) {
+                valid = false;
+                qtyInput.classList.add("is-invalid");
+            } else {
+                qtyInput.classList.remove("is-invalid");
+            }
+        });
+        if (!valid) {
+            alert("Số lượng tối đa cho mỗi sản phẩm là 30!");
+            e.preventDefault();
+        }
     };
 </script>
 

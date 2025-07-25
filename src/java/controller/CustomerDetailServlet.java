@@ -60,7 +60,7 @@ public class CustomerDetailServlet extends HttpServlet {
             CustomerDAO customerDAO = new CustomerDAO(conn);
 
             if ("delete".equals(action)) {
-                customerDAO.deleteCustomer(customerId);
+                customerDAO.softDeleteCustomer(customerId);
                 resp.sendRedirect(req.getContextPath() + "/admin/customers");
                 return;
             }
