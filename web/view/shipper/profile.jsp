@@ -63,7 +63,7 @@
                         <div class="form-group form-group-full">
                             <label for="address">Address</label>
                             <input type="text" id="address" name="address" class="form-control form-control-sm"
-                                   value="${profile.address}" required>
+                                   value="${profile.address}" required readonly>
                         </div>
                     </div>
                 </section>
@@ -75,14 +75,6 @@
             </form>
         </div>
     </div>
-    <c:if test="${not empty message || not empty error}">
-        <div class="popup-overlay" id="popupOverlay">
-            <div class="popup-box ${not empty message ? 'success' : 'error'}">
-                <span class="popup-close" onclick="closePopup()">×</span>
-                <p>${not empty message ? message : error}</p>
-            </div>
-        </div>
-    </c:if>
     <script>
         document.querySelector('form').addEventListener('submit', function (e) {
             const email = document.getElementById('email').value.trim();
@@ -102,23 +94,14 @@
                 errors.push("Số điện thoại phải bao gồm đúng 9 chữ số.");
             }
 
-            if (address === "") {
-                errors.push("Địa chỉ không được để trống.");
-            }
-
             if (errors.length > 0) {
                 e.preventDefault();
                 alert(errors.join("\n"));
             }
         });
 
-         function closePopup() {
-        const popup = document.getElementById("popupOverlay");
-        if (popup) popup.style.display = "none";
-    }
+      
 
     // Auto close after 5s
-    window.addEventListener("DOMContentLoaded", () => {
-        setTimeout(closePopup, 5000);
-    });
+  
     </script>

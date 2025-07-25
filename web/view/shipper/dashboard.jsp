@@ -11,22 +11,12 @@
     </head>
     <body>
         <div class="container-fluid">
-            <div class="row"> 
+            <div class="row">
 
-                <!-- Main Content -->
                 <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                     <h2 class="mt-3">Shipper Dashboard</h2>
 
-                    <!-- Messages -->
-                    <c:if test="${not empty message}">
-                        <div class="alert alert-success">${message}</div>
-                    </c:if>
-                    <c:if test="${not empty error}">
-                        <div class="alert alert-danger">${error}</div>
-                    </c:if>
-
                     <div class="row mt-4">
-                        <!-- Assigned Deliveries -->
                         <div class="col-md-6">
                             <h4>Assigned Deliveries</h4>
                             <c:choose>
@@ -35,13 +25,18 @@
                                         <div class="delivery-card">
                                             <h5>Delivery #${delivery.id}</h5>
                                             <p>Order ID: ${delivery.orderId}</p>
-                                            <p>Priority: 
+                                            <p>Customer Name: <c:out value="${delivery.customer.name}"/></p>
+                                            <p>Customer Address: <c:out value="${delivery.customer.address}"/></p>
+                                            <p>Priority:
                                                 <c:choose>
                                                     <c:when test="${delivery.priorityLevel == 1}">Low</c:when>
                                                     <c:when test="${delivery.priorityLevel == 2}">Medium</c:when>
                                                     <c:when test="${delivery.priorityLevel == 3}">High</c:when>
                                                 </c:choose>
                                             </p>
+                                            <%-- Thêm Delivery Fee và Box Fee vào đây --%>
+                                            <p>Delivery Fee: <fmt:formatNumber value="${delivery.deliveryFee}" type="currency" currencySymbol="đ" maxFractionDigits="0"/></p>
+                                            <p>Box Fee: <fmt:formatNumber value="${delivery.boxFee}" type="currency" currencySymbol="đ" maxFractionDigits="0"/></p>
                                             <form action="${pageContext.request.contextPath}/shipper/delivery-action" method="post">
                                                 <input type="hidden" name="delivery_id" value="${delivery.id}">
                                                 <input type="hidden" name="action" value="accept">
@@ -56,7 +51,6 @@
                             </c:choose>
                         </div>
 
-                        <!-- In Transit Deliveries -->
                         <div class="col-md-6">
                             <h4>In Transit Deliveries</h4>
                             <c:choose>
@@ -65,6 +59,8 @@
                                         <div class="delivery-card">
                                             <h5>Delivery #${delivery.id}</h5>
                                             <p>Order ID: ${delivery.orderId}</p>
+                                            <p>Customer Name: <c:out value="${delivery.customer.name}"/></p>
+                                            <p>Customer Address: <c:out value="${delivery.customer.address}"/></p>
                                             <p>Accepted: <fmt:formatDate value="${delivery.acceptedTime}" pattern="dd/MM/yyyy HH:mm"/></p>
                                             <form action="${pageContext.request.contextPath}/shipper/delivery-action" method="post">
                                                 <input type="hidden" name="delivery_id" value="${delivery.id}">
@@ -85,29 +81,16 @@
                         </div>
                     </div>
 
-                    <!-- Notifications -->
                     <div class="row mt-4">
                         <div class="col-12">
                             <h4>Recent Notifications</h4>
                             <div class="notification-list">
-                                <c:choose>
-                                    <c:when test="${not empty notifications}">
-                                        <c:forEach items="${notifications}" var="notification">
-                                            <div class="notification-item ${notification.type == 'TRANSFER' ? 'transfer-urgent' : ''}">
-                                                <div class="d-flex justify-content-between">
-                                                    <div>
-                                                        <strong>${notification.type}</strong>
-                                                        <p>${notification.message}</p>
-                                                    </div>
-                                                    <small><fmt:formatDate value="${notification.createdAt}" pattern="dd/MM/yyyy HH:mm"/></small>
-                                                </div>
-                                            </div>
-                                        </c:forEach>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <div class="alert alert-info">No new notifications</div>
-                                    </c:otherwise>
-                                </c:choose>
+                                <c:if test="${not empty message}">
+                                    <div class="alert alert-success">${message}</div>
+                                </c:if>
+                                <c:if test="${not empty error}">
+                                    <div class="alert alert-danger">${error}</div>
+                                </c:if>
                             </div>
                         </div>
                     </div>

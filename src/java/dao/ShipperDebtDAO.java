@@ -505,25 +505,56 @@ public class ShipperDebtDAO {
         return list;
     }
 
-    // Hàm Java lấy tên shipper theo ID
+    public List<DebtHistory> getDebtHistory(Date date) throws SQLException {
+        List<DebtHistory> list = new ArrayList<>();
 
-    public String getShipperNameById(int shipperId) {
-    String name = "";
-    String sql = "SELECT u.full_name FROM shippers s JOIN users u ON s.user_id = u.id WHERE s.user_id = ?";
-    try (Connection conn = dbConnection.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setInt(1, shipperId);
-        try (ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                name = rs.getString("full_name");
-            } 
+        String sql = "SELECT dh.*, a.name AS changer_name, a.role AS changer_role "
+                + "FROM debt_history dh "
+                + "JOIN accounts a ON dh.changed_by = a.id "
+                + "WHERE dh.debt_date = ?";
+
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setDate(1, date);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                DebtHistory dh = new DebtHistory(
+                        rs.getInt("id"),
+                        rs.getInt("shipper_id"),
+                        rs.getDate("debt_date"),
+                        rs.getDouble("old_amount"),
+                        rs.getDouble("new_amount"),
+                        rs.getString("change_reason"),
+                        rs.getInt("changed_by"),
+                        rs.getTimestamp("changed_at"),
+                        rs.getString("changer_name"),
+                        rs.getString("changer_role")
+                );
+                list.add(dh);
+            }
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+
+        return list;
     }
-    return name;
-}
-    
+
+    // Hàm Java lấy tên shipper theo ID
+    public String getShipperNameById(int shipperId) {
+        String name = "";
+        String sql = "SELECT u.full_name FROM shippers s JOIN users u ON s.user_id = u.id WHERE s.user_id = ?";
+        try (Connection conn = dbConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, shipperId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    name = rs.getString("full_name");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return name;
+    }
+
     public void payDebtWithHistory(int shipperId, java.sql.Date date, String reason, int adminId) throws SQLException {
         // Lấy số tiền cũ
         double oldAmount = 0;
@@ -558,7 +589,5 @@ public class ShipperDebtDAO {
             stmt.executeUpdate();
         }
     }
-    
-    
-    
+
 }

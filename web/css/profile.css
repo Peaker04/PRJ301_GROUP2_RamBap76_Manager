@@ -327,3 +327,13 @@
         opacity: 1;
     }
 }
+
+
+input[readonly] {
+    background-color: #e9ecef; /* A light grey background, common for disabled/readonly fields */
+    opacity: 1; /* Ensure full opacity if browser defaults reduce it */
+    cursor: not-allowed; /* Indicate it's not editable */
+    font-weight: bold; /* Make the text bold */
+    color: #495057; /* Darker text color for better readability */
+}
+

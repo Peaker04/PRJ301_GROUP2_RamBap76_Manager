@@ -3,10 +3,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
 
 <div class="container-xxl px-3 py-3" style="max-width:1200px; max-height: calc(100vh - 120px);">
     <!-- Welcome -->
@@ -58,77 +66,11 @@
     </div>
 </div>
 
-
-<button id="chatbot-toggle" class="chatbot-toggle-button">
-    <i class="fas fa-comment-dots"></i>
-</button>
-
-<div id="chatbot-window" class="chatbot-window hidden">
-    <div class="chatbot-header">
-        <button class="back-button"><i class="fas fa-arrow-left"></i></button>
-        <div class="assistant-info">
-            <h3><i class="fas fa-robot"></i> RamBap76 Assistant</h3>
-            <p>Trợ lý AI thông minh cho quản lý RamBap76</p>
-        </div>
-        <div class="status">
-            <span class="status-dot"></span> Online
-        </div>
-    </div>
-
-    <div class="chat-messages">
-        <div class="chat-message bot">
-            <div class="message-content">
-                <div class="suggestion">Đánh giá khách hàng</div>
-                <p>Bạn cần hỗ trợ gì?</p>
-            </div>
-        </div>
-
-        <div class="chat-message user">
-            <div class="message-content">
-                <p>Trạng thái đơn hàng</p>
-            </div>
-        </div>
-        <div class="chat-message bot">
-            <div class="message-content">
-                <p>Chào bạn, RamBap76 đây! Bạn muốn biết trạng thái đơn hàng nào nè? Cho mình xin mã đơn hàng hoặc thông tin liên quan để mình kiểm tra giúp bạn nhé! 😊</p>
-            </div>
-        </div>
-        <div class="chat-message user">
-            <div class="message-content">
-                <p>Tạ Tuấn Kỳ hẹ hẹ</p>
-            </div>
-        </div>
-        <div class="chat-message bot">
-            <div class="message-content">
-                <p>Chào bạn! RamBap76 đây, rất vui được làm quen. 😊</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="chatbot-footer">
-        <div class="quick-replies">
-            <button>Trạng thái đơn hàng</button>
-            <button>Thông tin shipper</button>
-            <button>Công nợ</button>
-            <button>Vị trí giao hàng</button>
-        </div>
-        <div class="chat-input-area">
-            <input type="text" placeholder="Nhập tin nhắn của bạn...">
-            <button class="send-button"><i class="fas fa-paper-plane"></i></button>
-        </div>
-    </div>
-</div>
-<script>
-    const chatbotToggle = document.getElementById('chatbot-toggle');
-    const chatbotWindow = document.getElementById('chatbot-window');
-
-    chatbotToggle.addEventListener('click', () => {
-        chatbotWindow.classList.toggle('hidden');
-    });
-</script>
+<!-- Include phần chatbot -->
+<jsp:include page="/view/admin/chat.jsp" />
 
 <script>
-    // Orders by Month
+    // Script cho dashboard
     const ordersMonthLabels = JSON.parse('${ordersByMonthLabelsJson}');
     const ordersMonthData = JSON.parse('${ordersByMonthDataJson}');
 
@@ -153,7 +95,6 @@
         }
     });
 
-    // Products Sold This Month Donut
     const soldLabels = JSON.parse('${soldLabelsJson}');
     const soldData = JSON.parse('${soldDataJson}');
     new Chart(document.getElementById('productsSoldDonut'), {
@@ -164,7 +105,6 @@
         }
     });
 
-    // Inventory Donut
     const invLabels = JSON.parse('${invLabelsJson}');
     const invData = JSON.parse('${invDataJson}');
     new Chart(document.getElementById('inventoryDonut'), {
@@ -175,3 +115,6 @@
         }
     });
 </script>
+
+</body>
+</html>

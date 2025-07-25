@@ -13,50 +13,53 @@ import model.StationReceipt;
 
 public class DeliveryDAO {
 
-   public List<Delivery> getDeliveriesByShipper(int shipperId, String status) throws SQLException {
-    String sql = "SELECT d.*, c.name AS customer_name, c.address AS customer_address "
-               + "FROM deliveries d "
-               + "JOIN orders o ON d.order_id = o.id "
-               + "JOIN customers c ON o.customer_id = c.id "
-               + "WHERE d.current_shipper_id = ? AND d.status = ? "
-               + "ORDER BY d.priority_level DESC, d.assigned_time ASC";
+ public List<Delivery> getDeliveriesByShipper(int shipperId, String status) throws SQLException {
+        String sql = "SELECT d.*, c.name AS customer_name, c.address AS customer_address "
+                       + "FROM deliveries d "
+                       + "JOIN orders o ON d.order_id = o.id "
+                       + "JOIN customers c ON o.customer_id = c.id "
+                       + "WHERE d.current_shipper_id = ? AND d.status = ? "
+                       + "ORDER BY d.priority_level DESC, d.assigned_time ASC";
 
-    List<Delivery> deliveries = new ArrayList<>();
+        List<Delivery> deliveries = new ArrayList<>();
 
-    try (Connection conn = DBConnection.getConnection(); 
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        stmt.setInt(1, shipperId);
-        stmt.setString(2, status);
+            stmt.setInt(1, shipperId);
+            stmt.setString(2, status);
 
-        try (ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                Customer customer = new Customer();
-                Delivery delivery = new Delivery();
-                delivery.setId(rs.getInt("id"));
-                delivery.setOrderId(rs.getInt("order_id"));
-                delivery.setInitialShipperId(rs.getInt("initial_shipper_id"));
-                delivery.setCurrentShipperId(rs.getInt("current_shipper_id"));
-                delivery.setDeliveryFee(rs.getBigDecimal("delivery_fee"));
-                delivery.setBoxFee(rs.getBigDecimal("box_fee"));
-                delivery.setCollectedAmount(rs.getDouble("collected_amount"));
-                delivery.setStatus(rs.getString("status"));
-                delivery.setActualDeliveryTime(rs.getTimestamp("actual_delivery_time"));
-                delivery.setAssignedTime(rs.getTimestamp("assigned_time"));
-                delivery.setAcceptedTime(rs.getTimestamp("accepted_time"));
-                delivery.setNotes(rs.getString("notes"));
-                delivery.setPriorityLevel(rs.getInt("priority_level"));
-                
-                // Thêm thông tin khách hàng để hiển thị trên giao diện
-                customer.setName(rs.getString("customer_name"));
-                customer.setAddress(rs.getString("customer_address"));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Customer customer = new Customer();
+                    Delivery delivery = new Delivery();
+                    delivery.setId(rs.getInt("id"));
+                    delivery.setOrderId(rs.getInt("order_id"));
+                    delivery.setInitialShipperId(rs.getInt("initial_shipper_id"));
+                    delivery.setCurrentShipperId(rs.getInt("current_shipper_id"));
+                    delivery.setDeliveryFee(rs.getBigDecimal("delivery_fee"));
+                    delivery.setBoxFee(rs.getBigDecimal("box_fee"));
+                    delivery.setCollectedAmount(rs.getDouble("collected_amount"));
+                    delivery.setStatus(rs.getString("status"));
+                    delivery.setActualDeliveryTime(rs.getTimestamp("actual_delivery_time"));
+                    delivery.setAssignedTime(rs.getTimestamp("assigned_time"));
+                    delivery.setAcceptedTime(rs.getTimestamp("accepted_time"));
+                    delivery.setNotes(rs.getString("notes"));
+                    delivery.setPriorityLevel(rs.getInt("priority_level"));
 
-                deliveries.add(delivery);
+                    // Thêm thông tin khách hàng để hiển thị trên giao diện
+                    customer.setName(rs.getString("customer_name"));
+                    customer.setAddress(rs.getString("customer_address"));
+
+                    // QUAN TRỌNG: Gán đối tượng customer vào đối tượng delivery
+                    delivery.setCustomer(customer); // <--- THÊM DÒNG NÀY VÀO ĐÂY
+
+                    deliveries.add(delivery);
+                }
             }
         }
+        return deliveries;
     }
-    return deliveries;
-}
 
     public boolean updateDeliveryStatus(int deliveryId, String status, int shipperId) throws SQLException {
         String sql = "UPDATE deliveries SET status = ?, current_shipper_id = ? WHERE id = ?";
@@ -72,17 +75,44 @@ public class DeliveryDAO {
     }
 
     public boolean acceptDelivery(int deliveryId, int shipperId) throws SQLException {
-        String sql = "UPDATE deliveries SET status = 'IN_TRANSIT', accepted_time = GETDATE() "
-                + "WHERE id = ? AND current_shipper_id = ?";
+    String sql = "UPDATE deliveries SET status = 'IN_TRANSIT', accepted_time = GETDATE() "
+               + "WHERE id = ? AND current_shipper_id = ?";
 
-        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+    String updateOrderSql = "UPDATE orders SET status = 'DELIVERING' "
+                          + "WHERE id = (SELECT order_id FROM deliveries WHERE id = ?)";
 
-            stmt.setInt(1, deliveryId);
-            stmt.setInt(2, shipperId);
+    try (Connection conn = DBConnection.getConnection()) {
+        conn.setAutoCommit(false); // Bắt đầu transaction
 
-            return stmt.executeUpdate() > 0;
+        try (PreparedStatement stmt1 = conn.prepareStatement(sql);
+             PreparedStatement stmt2 = conn.prepareStatement(updateOrderSql)) {
+
+            // Cập nhật deliveries
+            stmt1.setInt(1, deliveryId);
+            stmt1.setInt(2, shipperId);
+            int rows1 = stmt1.executeUpdate();
+
+            // Cập nhật orders
+            stmt2.setInt(1, deliveryId);
+            int rows2 = stmt2.executeUpdate();
+
+            if (rows1 > 0 && rows2 > 0) {
+                conn.commit();
+                return true;
+            } else {
+                conn.rollback();
+                return false;
+            }
+
+        } catch (SQLException ex) {
+            conn.rollback();
+            throw ex;
+        } finally {
+            conn.setAutoCommit(true); // Trả lại mặc định
         }
     }
+}
+
 
     public boolean completeDelivery(int deliveryId, double collectedAmount) throws SQLException {
         String sql = "UPDATE deliveries SET status = 'COMPLETED', actual_delivery_time = ?, collected_amount = ? WHERE id = ?";

@@ -1,6 +1,7 @@
 package controller;
 
 import dao.ShipperDAO;
+import dao.UserProfileDAO;
 import model.Shipper;
 
 import jakarta.servlet.ServletException;
@@ -10,9 +11,11 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import model.UserProfile;
 
 @WebServlet("/admin/shippers")
 public class AdminManageShipperServlet extends HttpServlet {
+
     private ShipperDAO shipperDAO;
 
     @Override
@@ -24,7 +27,9 @@ public class AdminManageShipperServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        if (action == null) action = "list";
+        if (action == null) {
+            action = "list";
+        }
 
         try {
             switch (action) {
@@ -48,6 +53,10 @@ public class AdminManageShipperServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        int userId = Integer.parseInt(request.getParameter("user_id")); // NEW
+        String address = request.getParameter("area");
+
         try {
             String idParam = request.getParameter("id");
             int id = (idParam == null || idParam.isEmpty()) ? 0 : Integer.parseInt(idParam);
@@ -57,12 +66,33 @@ public class AdminManageShipperServlet extends HttpServlet {
             int priorityLevel = Integer.parseInt(request.getParameter("priority_level"));
             double dailyIncome = Double.parseDouble(request.getParameter("daily_income"));
 
-            Shipper shipper = new Shipper(id, name, area, priorityLevel, dailyIncome);
+            Shipper shipper = new Shipper(userId, name, area, priorityLevel, dailyIncome);
 
             if (request.getParameter("mode").equals("create")) {
                 shipperDAO.insertShipper(shipper);
             } else {
                 shipperDAO.updateShipper(shipper);
+            }
+
+            UserProfileDAO userProfileDAO = new UserProfileDAO();
+            UserProfile userProfile = userProfileDAO.getUserProfileByUserId(userId);
+
+            if (userProfile == null) {
+                // Tạo mới profile nếu chưa có
+                userProfile = new UserProfile();
+                userProfile.setUserId(userId);
+                userProfile.setAddress(area);
+                // Thiết lập các giá trị mặc định khác
+                userProfile.setFirstName("");
+                userProfile.setLastName("");
+                userProfile.setEmail("");
+                userProfile.setGender("");
+                userProfile.setPhoneNumber("");
+                userProfileDAO.insertUserProfile(userProfile);
+            } else {
+                // Cập nhật địa chỉ nếu đã có profile
+                userProfile.setAddress(area);
+                userProfileDAO.updateUserProfile(userProfile);
             }
 
             response.sendRedirect("shippers");
@@ -75,13 +105,15 @@ public class AdminManageShipperServlet extends HttpServlet {
             throws ServletException, IOException, SQLException {
         List<Shipper> shippers = shipperDAO.getAllShippers();
         request.setAttribute("shippers", shippers);
-        request.getRequestDispatcher("/view/admin/shipper_list.jsp").forward(request, response);
+        request.setAttribute("contentPage", "/view//admin/shipper_list.jsp");
+        request.getRequestDispatcher("/view/common/admin_layout.jsp").forward(request, response);
     }
 
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setAttribute("mode", "create");
-        request.getRequestDispatcher("/view/admin/shipper_form.jsp").forward(request, response);
+        request.setAttribute("contentPage", "/view//admin/shipper_form.jsp");
+        request.getRequestDispatcher("/view/common/admin_layout.jsp").forward(request, response);
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
@@ -89,8 +121,12 @@ public class AdminManageShipperServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         Shipper shipper = shipperDAO.getShipperById(id);
         request.setAttribute("shipper", shipper);
+        UserProfileDAO userProfileDAO = new UserProfileDAO();
+        UserProfile userProfile = userProfileDAO.getUserProfileByUserId(shipper.getUserId());
+        request.setAttribute("userProfile", userProfile);
         request.setAttribute("mode", "edit");
-        request.getRequestDispatcher("/view/admin/shipper_form.jsp").forward(request, response);
+        request.setAttribute("contentPage", "/view//admin/shipper_form.jsp");
+        request.getRequestDispatcher("/view/common/admin_layout.jsp").forward(request, response);
     }
 
     private void deleteShipper(HttpServletRequest request, HttpServletResponse response)
