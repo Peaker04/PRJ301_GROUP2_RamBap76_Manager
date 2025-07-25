@@ -14,7 +14,7 @@ public class ChatPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Hiển thị trang chatbot
-        request.getRequestDispatcher("/view/authentication/chat.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/chat.jsp").forward(request, response);
     }
 
     @Override

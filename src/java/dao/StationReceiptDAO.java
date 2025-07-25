@@ -201,5 +201,19 @@ public class StationReceiptDAO {
         }
         return list;
     }
-
+    
+    public String checkImportLimit(int productId, int quantity, Date receiptDate) throws SQLException {
+        String sql = "SELECT dbo.fn_CanImportProductToday(?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            ps.setInt(2, quantity);
+            ps.setDate(3, receiptDate);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString(1); // trả về null nếu không lỗi
+                }
+            }
+        }
+        return null;
+    }
 }

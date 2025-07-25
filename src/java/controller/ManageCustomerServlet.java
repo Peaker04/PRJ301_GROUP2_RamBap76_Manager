@@ -57,13 +57,29 @@ public class ManageCustomerServlet extends HttpServlet {
         String action = req.getParameter("action");
         try (Connection conn = DBConnection.getConnection()) {
             CustomerDAO customerDAO = new CustomerDAO(conn);
+            if ("edit".equals(action)){
+                int id = Integer.parseInt(req.getParameter("id"));
+                    Customer customer = customerDAO.getCustomerById(id);
+                    req.setAttribute("customer", customer);
+                    req.getRequestDispatcher("/admin/customers/detail").forward(req, resp);
+                    return;
+            }
+            if ("delete".equals(action)) {
+                int id = Integer.parseInt(req.getParameter("id"));
+                customerDAO.softDeleteCustomer(id);
+                resp.sendRedirect(req.getContextPath() + "/admin/customers?deleted=1");
+                return;
+            }
             if ("multiDelete".equals(action)) {
                 String idsStr = req.getParameter("ids");
                 if (idsStr != null && !idsStr.isEmpty()) {
                     String[] idArr = idsStr.split(",");
                     List<Integer> ids = new ArrayList<>();
                     for (String s : idArr) ids.add(Integer.parseInt(s));
-                    customerDAO.deleteCustomers(ids);
+                    for (int i : ids) {
+                        
+                    }
+                    customerDAO.softDeleteCustomers(ids);
                 }
                 resp.sendRedirect(req.getContextPath() + "/admin/customers?deleted=1");
                 return;
