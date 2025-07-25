@@ -34,13 +34,14 @@ public class CreateReceiptServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try (Connection conn = DBConnection.getConnection()) {
+            conn.setAutoCommit(false);
             StationReceiptDAO dao = new StationReceiptDAO(conn);
-            
+
             StationReceipt receipt = new StationReceipt();
             receipt.setReceiptDate(Date.valueOf(req.getParameter("receipt_date")));
             receipt.setStationName(req.getParameter("station_name"));
             receipt.setTransportFee(Double.parseDouble(req.getParameter("transport_fee")));
-            
+
             int totalQuantity = 0;
             List<StationReceiptDetail> details = new ArrayList<>();
             int idx = 0;
@@ -50,20 +51,31 @@ public class CreateReceiptServlet extends HttpServlet {
                 if (pid == null || qty == null) break;
                 pid = pid.trim(); qty = qty.trim();
                 if (!pid.isEmpty() && !qty.isEmpty()) {
+                    int productId = Integer.parseInt(pid);
+                    int quantity = Integer.parseInt(qty);
+
+                    String error = dao.checkImportLimit(productId, quantity, receipt.getReceiptDate());
+                    if (error != null) {
+                        conn.rollback();
+                        req.setAttribute("error", error);
+                        doGet(req, resp);
+                        return;
+                    }
+
                     StationReceiptDetail d = new StationReceiptDetail();
-                    d.setProductId(Integer.parseInt(pid));
-                    int q = Integer.parseInt(qty);
-                    d.setQuantity(q);
-                    d.setCurrentStock(q);
-                    d.setRemainingQuantity(q); // Nhập mới thì tồn kho = số lượng nhập
+                    d.setProductId(productId);
+                    d.setQuantity(quantity);
+                    d.setCurrentStock(quantity);
+                    d.setRemainingQuantity(quantity);
                     details.add(d);
-                    totalQuantity += q;
+                    totalQuantity += quantity;
                 }
                 idx++;
             }
-            receipt.setTotalQuantity(totalQuantity);
 
+            receipt.setTotalQuantity(totalQuantity);
             dao.createReceipt(receipt, details);
+            conn.commit();
             resp.sendRedirect(req.getContextPath() + "/admin/receipts");
         } catch (Exception e) {
             throw new ServletException(e);

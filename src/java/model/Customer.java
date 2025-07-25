@@ -9,6 +9,7 @@ public class Customer {
     private Double latitude;
     private Double longitude;
     private int totalOrders;
+    private boolean isActive;
 
     public Customer() {
     }
@@ -86,5 +87,14 @@ public class Customer {
     public void setTotalOrders(int totalOrders) {
         this.totalOrders = totalOrders;
     }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+    
 }
 

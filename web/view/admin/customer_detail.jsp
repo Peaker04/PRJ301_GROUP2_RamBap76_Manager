@@ -38,7 +38,7 @@
                 </div>
                 <div class="col-md-6 mb-2">
                     <label>Phone</label>
-                    <input type="text" name="phone" class="form-control" value="${customer.phone}" ${!isEdit ? 'disabled' : ''} required>
+                    <input type="tel" name="phone" class="form-control" pattern="[0-9]{10}" value="${customer.phone}" ${!isEdit ? 'disabled' : ''} required>
                 </div>
             </div>
             <div class="row mb-3">

@@ -11,7 +11,7 @@ public class CustomerDAO {
 
      public List<Customer> getAllCustomers(String search, String sort) throws SQLException {
         List<Customer> list = new ArrayList<>();
-        String sql = "SELECT * FROM customers WHERE 1=1";
+        String sql = "SELECT * FROM customers WHERE is_active = 1";
         if (search != null && !search.isEmpty()) {
             sql += " AND (name LIKE ? OR phone LIKE ? OR address LIKE ?)";
         }
@@ -46,27 +46,7 @@ public class CustomerDAO {
     public List<Customer> getAllCustomers() throws SQLException {
         return getAllCustomers(null, "asc");
     }
-     
-    public Customer getCustomerById(int id) throws SQLException {
-        String sql = "SELECT * FROM customers WHERE id = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                Customer c = new Customer();
-                c.setId(rs.getInt("id"));
-                c.setName(rs.getString("name"));
-                c.setPhone(rs.getString("phone"));
-                c.setAddress(rs.getString("address"));
-                c.setNotes(rs.getString("notes"));
-                c.setLatitude(rs.getObject("latitude") != null ? rs.getDouble("latitude") : null);
-                c.setLongitude(rs.getObject("longitude") != null ? rs.getDouble("longitude") : null);
-                return c;
-            }
-        }
-        return null;
-    }
-
+    
     public void createCustomer(Customer c) throws SQLException {
         String sql = "INSERT INTO customers (name, phone, address, notes, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -79,32 +59,10 @@ public class CustomerDAO {
             ps.executeUpdate();
         }
     }
-    
-    public void updateCustomer(Customer c) throws SQLException {
-        String sql = "UPDATE customers SET name=?, phone=?, address=?, notes=?, latitude=?, longitude=? WHERE id=?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, c.getName());
-            ps.setString(2, c.getPhone());
-            ps.setString(3, c.getAddress());
-            ps.setString(4, c.getNotes());
-            if (c.getLatitude() != null) ps.setDouble(5, c.getLatitude()); else ps.setNull(5, Types.DOUBLE);
-            if (c.getLongitude() != null) ps.setDouble(6, c.getLongitude()); else ps.setNull(6, Types.DOUBLE);
-            ps.setInt(7, c.getId());
-            ps.executeUpdate();
-        }
-    }
 
-    public void deleteCustomer(int id) throws SQLException {
-        String sql = "DELETE FROM customers WHERE id=?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
-        }
-    }
-
-    public void deleteCustomers(List<Integer> ids) throws SQLException {
+    public void softDeleteCustomers(List<Integer> ids) throws SQLException {
         if (ids == null || ids.isEmpty()) return;
-        StringBuilder sql = new StringBuilder("DELETE FROM customers WHERE id IN (");
+        StringBuilder sql = new StringBuilder("UPDATE customers SET is_active = 0 WHERE id IN (");
         for (int i = 0; i < ids.size(); i++) {
             sql.append("?");
             if (i != ids.size() - 1) sql.append(",");
@@ -119,7 +77,7 @@ public class CustomerDAO {
     }
     
     public int countCustomers(String search) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM customers WHERE 1=1";
+        String sql = "SELECT COUNT(*) FROM customers WHERE is_active =1";
         List<Object> params = new ArrayList<>();
         if (search != null && !search.isEmpty()) {
             sql += " AND (name LIKE ? OR phone LIKE ? OR address LIKE ?)";
@@ -135,7 +93,7 @@ public class CustomerDAO {
     public List<Customer> getCustomersByPage(String search, String sort, int page, int size) throws SQLException {
         List<Customer> list = new ArrayList<>();
         int offset = (page - 1) * size;
-        String sql = "SELECT * FROM customers WHERE 1=1";
+        String sql = "SELECT * FROM customers WHERE is_active = 1";
         List<Object> params = new ArrayList<>();
         if (search != null && !search.isEmpty()) {
             sql += " AND (name LIKE ? OR phone LIKE ? OR address LIKE ?)";
@@ -182,5 +140,73 @@ public class CustomerDAO {
             }
         }
         return list;
+    }
+
+    public Customer getCustomerById(int id) throws SQLException {
+        String sql = "SELECT * FROM customers WHERE id = ? AND is_active = 1";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Customer c = new Customer();
+                c.setId(rs.getInt("id"));
+                c.setName(rs.getString("name"));
+                c.setPhone(rs.getString("phone"));
+                c.setAddress(rs.getString("address"));
+                c.setNotes(rs.getString("notes"));
+                c.setLatitude(rs.getObject("latitude") != null ? rs.getDouble("latitude") : null);
+                c.setLongitude(rs.getObject("longitude") != null ? rs.getDouble("longitude") : null);
+                c.setActive(rs.getBoolean("is_active"));
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public void addCustomer(Customer c) throws SQLException {
+        String sql = "INSERT INTO customers (name, phone, address, notes, latitude, longitude, is_active) VALUES (?, ?, ?, ?, ?, ?, 1)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, c.getName());
+            ps.setString(2, c.getPhone());
+            ps.setString(3, c.getAddress());
+            ps.setString(4, c.getNotes());
+            ps.setDouble(5, c.getLatitude());
+            ps.setDouble(6, c.getLongitude());
+            ps.executeUpdate();
+        }
+    }
+
+    public void updateCustomer(Customer c) throws SQLException {
+        String sql = "UPDATE customers SET name=?, phone=?, address=?, notes=?, latitude=?, longitude=? WHERE id=? AND is_active = 1";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, c.getName());
+            ps.setString(2, c.getPhone());
+            ps.setString(3, c.getAddress());
+            ps.setString(4, c.getNotes());
+            if (c.getLatitude() != null) ps.setDouble(5, c.getLatitude()); else ps.setNull(5, Types.DOUBLE);
+            if (c.getLongitude() != null) ps.setDouble(6, c.getLongitude()); else ps.setNull(6, Types.DOUBLE);
+            ps.setInt(7, c.getId());
+            ps.executeUpdate();
+        }
+    }
+
+    public void softDeleteCustomer(int id) throws SQLException {
+        String sql = "UPDATE customers SET is_active = 0 WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
+
+    public boolean phoneExists(String phone) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM customers WHERE phone = ? AND is_active = 1";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, phone);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+        return false;
     }
 }

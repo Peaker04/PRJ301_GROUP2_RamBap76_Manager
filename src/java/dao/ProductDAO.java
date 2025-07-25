@@ -124,7 +124,7 @@ public class ProductDAO {
     
     public void deleteProducts(List<Integer> ids) throws SQLException {
         if (ids == null || ids.isEmpty()) return;
-        StringBuilder sql = new StringBuilder("DELETE FROM products WHERE id IN (");
+            StringBuilder sql = new StringBuilder("UPDATE products SET is_deleted = 1 WHERE id IN (");
         for (int i = 0; i < ids.size(); i++) {
             sql.append("?");
             if (i < ids.size() - 1) sql.append(",");
@@ -168,10 +168,10 @@ public class ProductDAO {
     }
     
     public int countProducts(String search) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM V_ProductStock WHERE is_deleted = 0";
+        String sql = "SELECT COUNT(*) FROM V_ProductStock";
         List<Object> params = new ArrayList<>();
         if (search != null && !search.isEmpty()) {
-            sql += " AND product_name LIKE ?";
+            sql += " WHERE product_name LIKE ?";
             params.add("%" + search + "%");
         }
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -185,10 +185,10 @@ public class ProductDAO {
     public List<Product> getProductsByPage(String search, String sort, int page, int size) throws SQLException {
         List<Product> list = new ArrayList<>();
         int offset = (page-1)*size;
-        String sql = "SELECT * FROM V_ProductStock WHERE is_deleted = 0";
+        String sql = "SELECT * FROM V_ProductStock";
         List<Object> params = new ArrayList<>();
         if (search != null && !search.isEmpty()) {
-            sql += " AND product_name LIKE ?";
+            sql += " WHERE product_name LIKE ?";
             params.add("%" + search + "%");
         }
         if (sort == null || sort.equals("az")) sql += " ORDER BY product_name ASC";
@@ -241,5 +241,4 @@ public class ProductDAO {
         }
         return result;
     }
-
 }
